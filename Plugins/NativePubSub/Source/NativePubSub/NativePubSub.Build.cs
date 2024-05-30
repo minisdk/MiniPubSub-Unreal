@@ -1,5 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
+using Internal;
 using UnrealBuildTool;
 
 public class NativePubSub : ModuleRules
@@ -25,7 +27,7 @@ public class NativePubSub : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -49,5 +51,13 @@ public class NativePubSub : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
+		
+		if(Target.Platform == UnrealTargetPlatform.Android)
+		{
+			string uplPath = Path.Combine(ModuleDirectory, "NativePubSub_Android_UPL.xml");
+			Console.WriteLine("upl file path : " + uplPath);
+			Console.WriteLine("upl file exist? " + File.Exists(uplPath));
+			AdditionalPropertiesForReceipt.Add("AndroidPlugin", uplPath);
+		}
 	}
 }
