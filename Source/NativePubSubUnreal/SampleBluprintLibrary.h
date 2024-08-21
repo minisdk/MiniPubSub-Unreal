@@ -6,6 +6,18 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SampleBluprintLibrary.generated.h"
 
+
+USTRUCT()
+struct FTest
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString str;
+	UPROPERTY()
+	int integer;
+};
+
 /**
  * 
  */
@@ -19,4 +31,10 @@ class NATIVEPUBSUBUNREAL_API USampleBluprintLibrary : public UBlueprintFunctionL
 
 	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
 	static void CallBytesTest(const TArray<uint8> &Bytes);
+
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+	static void JsonTest();
+
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+	static void MyTest();
 };

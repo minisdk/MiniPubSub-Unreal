@@ -11,6 +11,8 @@ public class NativePubSubUnreal : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
 		PublicDependencyModuleNames.AddRange(new string[] { "NativePubSub" });
+		
+		PrivateDependencyModuleNames.AddRange(new []{"Json", "JsonUtilities"});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
