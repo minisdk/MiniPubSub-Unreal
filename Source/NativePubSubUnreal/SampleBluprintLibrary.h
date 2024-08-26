@@ -37,4 +37,7 @@ class NATIVEPUBSUBUNREAL_API USampleBluprintLibrary : public UBlueprintFunctionL
 
 	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
 	static void MyTest();
+	
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+    static void PubSubTest();
 };

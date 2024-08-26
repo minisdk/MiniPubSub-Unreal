@@ -129,11 +129,4 @@ public:
 			return StaticCastSharedPtr<const TMessage>(MessagePtr);
 		return MakeShareable(new TMessage(*MessagePtr));
 	}
-	// static TSharedPtr<TMessage> Convert(const TSharedPtr<FMessage>& MessagePtr)
-	// {
-	// 	check(MessagePtr.IsValid())
-	// 	if(MessagePtr->MessageType == EMessageType::UStruct)
-	// 		return StaticCastSharedPtr<TMessage>(MessagePtr);
-	// 	return MakeShareable(new TMessage(*MessagePtr));
-	// }
 };

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Data/Message.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Message*/);
+DECLARE_DELEGATE_OneParam(FReceiveDelegate, TSharedPtr<const FMessage> /*Message*/);
 
 // public class FReceiver
 
@@ -13,7 +13,7 @@ class NATIVEPUBSUB_API INode
 {
 public:
 	virtual ~INode(){};
-	virtual int Id() = 0;
+	virtual const int Id() const = 0;
 };
 
 class NATIVEPUBSUB_API ISubscribable : public INode
@@ -30,33 +30,14 @@ public:
 	virtual void Unwatch() = 0;
 };
 
-// class NATIVEPUBSUB_API IReceivable
-// {
-// public:
-// 	IReceivable(){}
-// 	virtual ~IReceivable(){};
-//
-// 	virtual void SetReceivingRule(const FTag& Tag) = 0;
-// 	virtual bool MatchTag(const FTag& Tag) = 0;
-// 	
-// };
+struct FReceiver final
+{
+	const int NodeId;
+	const FString Key;
+	const FReceiveDelegate ReceiveDelegate;
 
-// class NATIVEPUBSUB_API Publisher
-// {
-// public:
-// 	Publisher();
-// 	virtual ~Publisher();
-//
-// 		
-// 	
-// };
-
-
-// class NATIVEPUBSUB_API FReceivablePublisher : public IReceivable
-// {
-// public:
-// 	FReceivablePublisher();
-// 	virtual ~FReceivablePublisher() override;
-//
-// 	
-// };
+	FReceiver(const int& Id, const FString& Key, const FReceiveDelegate& Delegate)
+	: NodeId(Id)
+	, Key(Key)
+	, ReceiveDelegate(Delegate){}
+};
