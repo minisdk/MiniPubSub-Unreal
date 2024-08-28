@@ -82,4 +82,7 @@ void USampleBluprintLibrary::PubSubTest()
 
 	FTest T1 = FTest{ TEXT("T1Message"), 100};
 	Messenger1.Publish(TMessage<FTest>::Create(TEXT("M1"), T1));
+
+	Messenger1.Unsubscribe(TEXT("M2"));
+	Messenger2.Unsubscribe(TEXT("M1"));
 }
