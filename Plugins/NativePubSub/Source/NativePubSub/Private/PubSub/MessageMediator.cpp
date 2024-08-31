@@ -11,7 +11,7 @@ void FMessageMediator::Unregister(const int& Id, const FString& Key)
 	TArray<FReceiver>* Receivers = ReceiverDic.Find(Key);
 	if(Receivers != nullptr)
 	{
-		Receivers->RemoveAll([Id](const FReceiver Receiver)
+		Receivers->RemoveAll([Id](const FReceiver& Receiver)
 		{
 			return Receiver.NodeId == Id;
 		});

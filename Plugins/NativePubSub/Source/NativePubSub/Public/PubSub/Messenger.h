@@ -1,8 +1,8 @@
 #pragma once
 #include "Publisher.h"
-#include "ReceivablePublisher.h"
+#include "Receiver.h"
 
-class NATIVEPUBSUB_API FMessenger final: ISubscribable
+class NATIVEPUBSUB_API FMessenger final: INode
 {
 private:
 	const FPublisher Publisher; 
@@ -12,8 +12,8 @@ public:
 	:Publisher(FPublisher()){}
 
 	virtual const int Id() const override;
-	virtual void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate) override;
-	virtual void Unsubscribe(const FString& Key) override;
+	void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate);
+	void Unsubscribe(const FString& Key);
 
 	void Publish(TSharedPtr<const FMessage> Message) const;
 };

@@ -1,5 +1,6 @@
 #pragma once
-#include "ReceivablePublisher.h"
+#include "Node.h"
+#include "Data/Message.h"
 
 enum class EPublisherType
 {

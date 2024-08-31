@@ -6,16 +6,25 @@
 #include "JsonObjectConverter.h"
 
 /**
- * 
+ * Message contains with key and data.
+ * FMessage contains data as FJsonValue.
+ * TMessage is template class. It contains UStruct object.
  */
 
+
+/**
+ * FMessage is base message class
+ * Use FMessage::Create to create message
+ * Parse json string using FMessage::ParseFrom.
+ * Parsed message can be converted with TMessage.
+ */
 struct NATIVEPUBSUB_API FMessage
 {
 public:
 	enum class EMessageType
 	{
-		Base,
-		UStruct,
+		FMessage,
+		TMessage,
 	};
 
 	const EMessageType MessageType;  
@@ -23,21 +32,19 @@ public:
 	
 protected:
 	const TSharedPtr<FJsonValue> DataJson;
-	const EJson DataJsonType;
+
 
 private:
 	FMessage(const FString& Key)
-	: MessageType(EMessageType::Base)
+	: MessageType(EMessageType::FMessage)
 	, Key(Key)
 	, DataJson(nullptr)
-	, DataJsonType(EJson::Null)
 	{}
 
 	FMessage(const FString& Key, const TSharedPtr<FJsonValue>& DataJson)
-	: MessageType(EMessageType::Base)
+	: MessageType(EMessageType::FMessage)
 	, Key(Key)
 	, DataJson(DataJson)
-	, DataJsonType(DataJson->Type)
 	{}
 	
 protected:
@@ -45,7 +52,6 @@ protected:
 	: MessageType(MessageType)
 	, Key(Key)
 	, DataJson(nullptr)
-	, DataJsonType(EJson::Null)
 	{}
 
 public:
@@ -68,6 +74,11 @@ public:
 	}
 };
 
+/**
+ * TMessage contains UStruct data which can be serialized with json.
+ * Use TMessage::Convert FMessage type message to TMessage.
+ * 
+ */
 template<typename DataType>
 struct NATIVEPUBSUB_API TMessage final :  FMessage
 {
@@ -75,14 +86,15 @@ private:
 	DataType *DataPtr;
 
 	TMessage(const FString& Key, const DataType& Data)
-	: FMessage(Key, EMessageType::UStruct)
+	: FMessage(Key, EMessageType::TMessage)
 	, DataPtr(new DataType(Data))
 	{}
 
 	explicit TMessage(const FMessage& Message)
 	:FMessage(Message)
 	{
-		if(DataJsonType == EJson::Object)
+		// DataJson's type have to EJson::Object 
+		if(DataJson != nullptr && DataJson->Type == EJson::Object)
 		{
 			DataPtr = new DataType();
 			FJsonObjectConverter::JsonObjectToUStruct(DataJson->AsObject().ToSharedRef(), DataPtr);
@@ -125,8 +137,10 @@ public:
 	static TSharedPtr<const TMessage> Convert(const TSharedPtr<const FMessage>& MessagePtr)
 	{
 		check(MessagePtr.IsValid())
-		if(MessagePtr->MessageType == EMessageType::UStruct)
+		// if message's original type is TMessage, static cast called  
+		if(MessagePtr->MessageType == EMessageType::TMessage)
 			return StaticCastSharedPtr<const TMessage>(MessagePtr);
+		// If message' original type is FMessage, data is Deserialized from FMessage::DataJson
 		return MakeShareable(new TMessage(*MessagePtr));
 	}
 };

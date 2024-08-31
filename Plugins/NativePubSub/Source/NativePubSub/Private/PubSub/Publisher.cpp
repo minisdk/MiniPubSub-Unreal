@@ -1,6 +1,5 @@
 #include "PubSub/Publisher.h"
 
-#include "JsonObjectConverter.h"
 #include "PubSub/MessageManager.h"
 
 static int GetId()

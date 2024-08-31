@@ -1,8 +1,8 @@
 #pragma once
 #include "Publisher.h"
-#include "ReceivablePublisher.h"
+#include "Receiver.h"
 
-class FWatcher final : IWatchable
+class FWatcher final : INode
 {
 private:
 	const FPublisher Publisher;	
@@ -11,8 +11,8 @@ public:
 	:Publisher(FPublisher()){}
 	
 	virtual const int Id() const override;
-	virtual void Watch(const FReceiveDelegate& ReceiveDelegate) override;
-	virtual void Unwatch() override;
+	void Watch(const FReceiveDelegate& ReceiveDelegate);
+	void Unwatch();
 
 	void Publish(TSharedPtr<const FMessage> Message) const;
 };
