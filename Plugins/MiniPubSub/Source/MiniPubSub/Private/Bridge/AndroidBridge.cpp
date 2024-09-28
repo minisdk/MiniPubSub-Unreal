@@ -15,9 +15,9 @@ FAndroidBridge::FAndroidBridge()
 	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
 	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
 	SendTextMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;)V");
-	SendDataMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "([B)V");
-
+	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass"))
 	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
+	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass ok"))
 #endif
 	DelNativeTextCallback.BindLambda([this](const FString& Text)
 	{

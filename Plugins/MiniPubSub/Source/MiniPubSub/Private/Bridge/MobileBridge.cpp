@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MobileBridge.h"
+#include "Bridge/MobileBridge.h"
 
 #if PLATFORM_ANDROID
 #include "AndroidBridge.h"
@@ -17,23 +17,24 @@ FMobileBridge::FMobileBridge()
 	this->Bridge = MakeShareable(new FIOSBridge());
 #else
 #endif
-	this->Bridge->DelNativeTextHandle.BindLambda([this](const FString& Text)
-	{
-		this->DelNativeTextHandle.Execute(Text);
-	});
+	// this->Bridge->DelNativeTextHandle.BindLambda([this](const FString& Text)
+	// {
+	// 	this->DelNativeTextHandle.Execute(Text);
+	// });
 }
 
-FMobileBridge::~FMobileBridge()
-{
-}
-
-TSharedRef<FMobileBridge> FMobileBridge::Get()
-{
-	static TSharedRef<FMobileBridge> MobileBridge = MakeShareable(new FMobileBridge());
-	return MobileBridge;
-}
+// TSharedRef<FMobileBridge> FMobileBridge::Get()
+// {
+// 	static TSharedRef<FMobileBridge> MobileBridge = MakeShareable(new FMobileBridge());
+// 	return MobileBridge;
+// }
 
 void FMobileBridge::Send(const FString& Text)
 {
 	this->Bridge.Get()->Send(Text);
+}
+
+void FMobileBridge::BindNative(const FDelegate_Native_Text_Handler& Handle)
+{
+	this->Bridge->DelNativeTextHandle = Handle;
 }

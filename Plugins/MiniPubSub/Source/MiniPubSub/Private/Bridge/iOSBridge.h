@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NativeBridge.h"
+#include "Bridge/NativeBridge.h"
 
 /**
  * 

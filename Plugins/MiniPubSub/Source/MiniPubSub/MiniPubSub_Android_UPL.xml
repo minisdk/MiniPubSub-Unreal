@@ -16,10 +16,22 @@
     <buildGradleAdditions>
         <log text="MiniPubSub gradle modify"/>
         <insert>
+<!--            android {-->
+<!--                defaultConfig {-->
+<!--                    multiDexEnabled true-->
+<!--                }-->
+<!--            }-->
             dependencies{
+<!--            implementation 'androidx.multidex:multidex:2.0.1'-->
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+                implementation 'com.google.code.gson:gson:2.11.0'
                 implementation fileTree(dir: 'src/main/libs/minipubsub', include: ['*.aar'])
             }
         </insert>
     </buildGradleAdditions>
+
+<!--    <androidManifestUpdates>-->
+<!--        <addAttribute tag="application" name="android:name" value="androidx.multidex.MultiDexApplication"/>-->
+<!--    </androidManifestUpdates>-->
 
 </root>

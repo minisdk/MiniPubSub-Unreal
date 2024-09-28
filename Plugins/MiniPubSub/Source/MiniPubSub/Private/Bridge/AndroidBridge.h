@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NativeBridge.h"
+#include "Bridge/NativeBridge.h"
 #if PLATFORM_ANDROID
 #include "Android/AndroidJavaEnv.h"
 #endif
@@ -17,7 +17,6 @@ class FAndroidBridge : public INativeBridge
 	TSharedPtr<JNIEnv> JNIEnv;
 	jobject AndroidBridgeObject;
 	jmethodID SendTextMethod;
-	jmethodID SendDataMethod;
 #endif
 
 public:

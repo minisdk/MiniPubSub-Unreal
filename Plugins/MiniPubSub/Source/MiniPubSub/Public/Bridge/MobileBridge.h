@@ -3,20 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NativeBridge.h"
+#include "Bridge/NativeBridge.h"
 
 /**
  * 
  */
-class FMobileBridge : public INativeBridge
+class FMobileBridge
 {
 	TSharedPtr<INativeBridge> Bridge;
 
 public:
 	FMobileBridge();
-	virtual ~FMobileBridge() override;
 
-	static TSharedRef<FMobileBridge> Get();
+	// static TSharedRef<FMobileBridge> Get();
 
-	virtual void Send(const FString& Text) override;
+	void Send(const FString& Text);
+	void BindNative(const FDelegate_Native_Text_Handler& Handle);
 };

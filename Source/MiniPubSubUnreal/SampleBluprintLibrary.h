@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Public/NativeManager.h"
 #include "SampleBluprintLibrary.generated.h"
 
 
@@ -17,6 +18,8 @@ struct FTest
 	UPROPERTY()
 	int integer;
 };
+
+
 
 /**
  * 
@@ -40,4 +43,10 @@ class MINIPUBSUBUNREAL_API USampleBluprintLibrary : public UBlueprintFunctionLib
 	
 	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
     static void PubSubTest();
+
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+	static void PubSubInitTest();
+
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+	static void SendNativeTest(const FToastData& Data);
 };

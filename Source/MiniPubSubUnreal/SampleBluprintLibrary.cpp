@@ -6,6 +6,7 @@
 #include "JsonObjectConverter.h"
 #include "MyTester.h"
 #include "Data/Message.h"
+#include "Public/NativeManager.h"
 #include "PubSub/Messenger.h"
 
 void USampleBluprintLibrary::CallNativeTest(const FString& Text)
@@ -85,4 +86,24 @@ void USampleBluprintLibrary::PubSubTest()
 
 	Messenger1.Unsubscribe(TEXT("M2"));
 	Messenger2.Unsubscribe(TEXT("M1"));
+}
+
+void USampleBluprintLibrary::PubSubInitTest()
+{
+	UE_LOG(LogTemp, Display, TEXT("PubSubInitTest!!"))
+	UNativeManager* NativeManager = UNativeManager::Get(); 
+	if(IsValid(NativeManager))
+	{
+		NativeManager->InitNativePubSub();
+	}
+	UE_LOG(LogTemp, Display, TEXT("PubSubInitTest end!!"))
+}
+
+void USampleBluprintLibrary::SendNativeTest(const FToastData& Data)
+{
+	UNativeManager* NativeManager = UNativeManager::Get();
+	if(IsValid(NativeManager))
+	{
+		NativeManager->ShowToast(Data);
+	}
 }

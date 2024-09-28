@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Bridge/NativeRelay.h"
 #include "Modules/ModuleManager.h"
 
 class FMiniPubSubModule : public IModuleInterface
 {
+private:
+	FNativeRelay* NativeRelay;
 public:
 
 	/** IModuleInterface implementation */
