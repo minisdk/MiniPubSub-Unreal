@@ -28,11 +28,9 @@ void FMessageMediator::Unwatch(const int& Id)
 	WatcherDic.Remove(Id);
 }
 
-void FMessageMediator::Publish(TSharedPtr<const FMessage> Message, const int& PublisherId)
+void FMessageMediator::Publish(const FMessage& Message, const int& PublisherId)
 {
-	if(Message.IsValid() == false)
-		 return;
-	if(TArray<FReceiver>* Receivers = ReceiverDic.Find(Message->Key))
+	if(TArray<FReceiver>* Receivers = ReceiverDic.Find(Message.Info.Key))
 	{
 		for (FReceiver Receiver : *Receivers)
 		{

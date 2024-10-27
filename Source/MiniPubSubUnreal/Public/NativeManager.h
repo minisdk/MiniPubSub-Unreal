@@ -36,7 +36,7 @@ class MINIPUBSUBUNREAL_API UNativeManager : public UObject
 {
 	GENERATED_BODY()
 	FMessenger NativeMessenger;
-	void OnSendToast(TSharedPtr<const FMessage> Message);
+	void OnSendToast(const FMessage& Message);
 
 	static UNativeManager* Instance;
 public:

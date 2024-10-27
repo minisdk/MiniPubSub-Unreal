@@ -4,7 +4,7 @@
 
 #include "Data/Message.h"
 
-DECLARE_DELEGATE_OneParam(FReceiveDelegate, TSharedPtr<const FMessage> /*Message*/);
+DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Message*/);
 
 struct MINIPUBSUB_API FReceiver final
 {

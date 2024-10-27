@@ -30,5 +30,11 @@ public class MiniPubSubUnreal : ModuleRules
 			Console.WriteLine("upl file exist? " + File.Exists(uplPath));
 			AdditionalPropertiesForReceipt.Add("AndroidPlugin", uplPath);
 		}
+		else if(Target.Platform == UnrealTargetPlatform.IOS)
+        {
+	        string frameworkName = "Thirdparty/iOS/sample.framework";
+	        string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
+	        PublicAdditionalFrameworks.Add(new Framework("sample", frameworkPath, Framework.FrameworkMode.LinkAndCopy));
+		}
 	}
 }

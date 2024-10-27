@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Bridge/MobileBridge.h"
+#include "Bridge/Mobile.h"
 
 #if PLATFORM_ANDROID
 #include "AndroidBridge.h"
@@ -9,7 +9,7 @@
 #endif
 
 
-FMobileBridge::FMobileBridge()
+FMobile::FMobile()
 {
 #if PLATFORM_ANDROID
 	this->Bridge = MakeShareable(new FAndroidBridge());
@@ -29,12 +29,12 @@ FMobileBridge::FMobileBridge()
 // 	return MobileBridge;
 // }
 
-void FMobileBridge::Send(const FString& Text)
+void FMobile::Send(const FString& Info, const FString& Data)
 {
-	this->Bridge.Get()->Send(Text);
+	this->Bridge.Get()->Send(Info, Data);
 }
 
-void FMobileBridge::BindNative(const FDelegate_Native_Text_Handler& Handle)
+void FMobile::BindNative(const FDelegate_Native_Handler& Handle)
 {
-	this->Bridge->DelNativeTextHandle = Handle;
+	this->Bridge->NativeHandle = Handle;
 }

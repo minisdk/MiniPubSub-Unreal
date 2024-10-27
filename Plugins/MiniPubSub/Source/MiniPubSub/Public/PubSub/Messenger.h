@@ -15,5 +15,5 @@ public:
 	void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate);
 	void Unsubscribe(const FString& Key);
 
-	void Publish(TSharedPtr<const FMessage> Message) const;
+	void Publish(const FMessage& Message) const;
 };

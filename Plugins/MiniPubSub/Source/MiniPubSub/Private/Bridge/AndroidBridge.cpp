@@ -3,8 +3,7 @@
 
 #include "AndroidBridge.h"
 
-FDelegate_Native_Text_Handler DelNativeTextCallback;
-FDelegate_Native_Data_Handler DelNativeDataCallback;
+FDelegate_Native_Handler DelNativeTextCallback;
 
 FAndroidBridge::FAndroidBridge()
 {
@@ -19,21 +18,21 @@ FAndroidBridge::FAndroidBridge()
 	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
 	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass ok"))
 #endif
-	DelNativeTextCallback.BindLambda([this](const FString& Text)
+	DelNativeTextCallback.BindLambda([this](const FString& Info, const FString& Data)
 	{
-		this->DelNativeTextHandle.Execute(Text);
+		// this->NativeHandle.Execute(Text);
 	});
-	DelNativeDataCallback.BindLambda([this](const TArray<byte>& Data)
-	{
-		this->DelNativeDataHandle.Execute(Data);
-	});
+	// DelNativeDataCallback.BindLambda([this](const TArray<byte>& Data)
+	// {
+	// 	this->DelNativeDataHandle.Execute(Data);
+	// });
 }
 
 FAndroidBridge::~FAndroidBridge()
 {
 }
 
-void FAndroidBridge::Send(const FString& Text)
+void FAndroidBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_ANDROID
 	std::string StdText(TCHAR_TO_UTF8(*Text));

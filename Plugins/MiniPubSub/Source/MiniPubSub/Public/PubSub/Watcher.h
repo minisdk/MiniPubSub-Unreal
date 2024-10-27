@@ -14,5 +14,5 @@ public:
 	void Watch(const FReceiveDelegate& ReceiveDelegate);
 	void Unwatch();
 
-	void Publish(TSharedPtr<const FMessage> Message) const;
+	void Publish(const FMessage& Message) const;
 };

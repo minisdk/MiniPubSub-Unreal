@@ -17,7 +17,7 @@ void FWatcher::Unwatch()
 	FMessageManager::Get()->GetMediator().Unwatch(Id());
 }
 
-void FWatcher::Publish(TSharedPtr<const FMessage> Message) const
+void FWatcher::Publish(const FMessage& Message) const
 {
 	Publisher.Publish(Message);
 }

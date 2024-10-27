@@ -61,5 +61,15 @@ public class MiniPubSub : ModuleRules
 			Console.WriteLine("upl file exist? " + File.Exists(uplPath));
 			AdditionalPropertiesForReceipt.Add("AndroidPlugin", uplPath);
 		}
+		else if (Target.Platform == UnrealTargetPlatform.IOS)
+		{
+			PublicSystemLibraryPaths.Add("/usr/lib/swift");
+			PublicSystemLibraryPaths.Add("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos");
+			PublicSystemLibraryPaths.Add("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/iphoneos");
+			
+			string frameworkName = "Thirdparty/iOS/MiniPubSub.framework";
+			string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
+			PublicAdditionalFrameworks.Add(new Framework("MiniPubSub", frameworkPath, Framework.FrameworkMode.LinkAndCopy));
+		}
 	}
 }

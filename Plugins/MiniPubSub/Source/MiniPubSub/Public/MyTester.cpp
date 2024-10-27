@@ -1,5 +1,5 @@
 #include "MyTester.h"
-#include "Bridge/MobileBridge.h"
+#include "Bridge/Mobile.h"
 
 void FMyTester::CallTest(const FString& Text)
 {

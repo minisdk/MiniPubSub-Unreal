@@ -23,5 +23,5 @@ public:
 	FAndroidBridge();
 	virtual ~FAndroidBridge() override;
 
-	virtual void Send(const FString& Text) override;
+	virtual void Send(const FString& Info, const FString& Data) override;
 };

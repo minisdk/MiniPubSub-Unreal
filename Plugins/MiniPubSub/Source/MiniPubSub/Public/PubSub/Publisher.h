@@ -19,5 +19,5 @@ public:
 
 	FPublisher();
 	virtual ~FPublisher() override;
-	void Publish(TSharedPtr<const FMessage> Message) const;
+	void Publish(const FMessage& Message) const;
 };

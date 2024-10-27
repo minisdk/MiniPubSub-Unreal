@@ -1,23 +1,30 @@
 #include "Bridge/NativeRelay.h"
-#include "Bridge/MobileBridge.h"
+#include "Bridge/Mobile.h"
 
-void FNativeRelay::OnReceiveFromNative(const FString& Data) const
+void FNativeRelay::OnReceiveFromNative(const FString& Info, const FString& Data) const
 {
-	Watcher->Publish(FMessage::ParseFrom(Data));
+	FMessageInfo Decoded;
+	FJsonObjectConverter::JsonObjectStringToUStruct(Info, &Decoded);
+	UE_LOG(LogTemp, Display, TEXT("[Unreal] OnReceiveFromNative... decoded info key : %s"), *Decoded.Key)
+	Watcher->Publish(FMessage(Decoded, Data));
 }
 
-void FNativeRelay::OnWatch(TSharedPtr<const FMessage> Message) const
+void FNativeRelay::OnWatch(const FMessage& Message) const
 {
-	Bridge->Send(Message->ToString());
+	FString InfoStr;
+	if(FJsonObjectConverter::UStructToJsonObjectString(Message.Info, InfoStr))
+	{
+		Mobile->Send(InfoStr, Message.Json);	
+	}
+	
 }
 
 FNativeRelay::FNativeRelay()
 {
-	Bridge = MakeShareable(new FMobileBridge());
+	Mobile = MakeShareable(new FMobile());
 	Watcher = MakeShareable(new FWatcher());
 	Watcher->Watch(FReceiveDelegate::CreateRaw(this, &FNativeRelay::OnWatch));
-	// Bridge->DelNativeTextHandle.BindRaw(this, &FNativeRelay::OnReceiveFromNative);
-	Bridge->BindNative(FDelegate_Native_Text_Handler::CreateRaw(this, &FNativeRelay::OnReceiveFromNative));
+	Mobile->BindNative(FDelegate_Native_Handler::CreateRaw(this, &FNativeRelay::OnReceiveFromNative));
 }
 
 FNativeRelay::~FNativeRelay()

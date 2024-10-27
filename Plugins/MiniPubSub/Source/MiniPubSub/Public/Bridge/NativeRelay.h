@@ -1,15 +1,15 @@
 #pragma once
-#include "MobileBridge.h"
+#include "Mobile.h"
 #include "PubSub/Watcher.h"
 
 class FNativeRelay
 {
 private:
-	TSharedPtr<FMobileBridge> Bridge;
+	TSharedPtr<FMobile> Mobile;
 	TSharedPtr<FWatcher> Watcher;
 
-	void OnReceiveFromNative(const FString& Data) const;
-	void OnWatch(TSharedPtr<const FMessage> Message) const;
+	void OnReceiveFromNative(const FString& Info, const FString& Data) const;
+	void OnWatch(const FMessage& Message) const;
 	
 public:
 	FNativeRelay();

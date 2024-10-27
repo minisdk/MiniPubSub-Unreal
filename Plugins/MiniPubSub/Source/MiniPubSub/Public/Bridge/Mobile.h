@@ -8,15 +8,15 @@
 /**
  * 
  */
-class FMobileBridge
+class FMobile
 {
 	TSharedPtr<INativeBridge> Bridge;
 
 public:
-	FMobileBridge();
+	FMobile();
 
 	// static TSharedRef<FMobileBridge> Get();
 
-	void Send(const FString& Text);
-	void BindNative(const FDelegate_Native_Text_Handler& Handle);
+	void Send(const FString& Info, const FString& Data);
+	void BindNative(const FDelegate_Native_Handler& Handle);
 };

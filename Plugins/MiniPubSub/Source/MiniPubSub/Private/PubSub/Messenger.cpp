@@ -17,7 +17,7 @@ void FMessenger::Unsubscribe(const FString& Key)
 	FMessageManager::Get()->GetMediator().Unregister(Id(), Key);
 }
 
-void FMessenger::Publish(TSharedPtr<const FMessage> Message) const
+void FMessenger::Publish(const FMessage& Message) const
 {
 	Publisher.Publish(Message);
 }

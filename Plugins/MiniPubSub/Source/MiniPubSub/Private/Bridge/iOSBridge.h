@@ -8,11 +8,16 @@
 /**
  * 
  */
-class FIOSBridge : public INativeBridge
+class FIOSBridge final : public INativeBridge
 {
+private:
 public:
+	static FIOSBridge* Instance;
+	
 	FIOSBridge();
 	virtual ~FIOSBridge() override;
 	
-	virtual void Send(const FString& Text) override;
+	virtual void Send(const FString& Info, const FString& Data) override;
+
+	// static void NativeCallback(const char* Text);
 };

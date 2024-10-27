@@ -3,8 +3,7 @@
 // using byte = unsigned char;
 using byte = char;
 
-DECLARE_DELEGATE_OneParam(FDelegate_Native_Data_Handler, const TArray<byte>&);
-DECLARE_DELEGATE_OneParam(FDelegate_Native_Text_Handler, const FString&);
+DECLARE_DELEGATE_TwoParams(FDelegate_Native_Handler, const FString&, const FString&);
 
 class INativeBridge
 {
@@ -13,8 +12,7 @@ public:
 	{
 		
 	};
-
-	FDelegate_Native_Data_Handler DelNativeDataHandle;
-	FDelegate_Native_Text_Handler DelNativeTextHandle;
-	virtual void Send(const FString& Text) = 0;
+	
+	FDelegate_Native_Handler NativeHandle;
+	virtual void Send(const FString& Info, const FString& Data) = 0;
 };

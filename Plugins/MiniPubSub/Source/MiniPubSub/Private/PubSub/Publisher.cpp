@@ -16,7 +16,7 @@ FPublisher::~FPublisher()
 {
 }
 
-void FPublisher::Publish(TSharedPtr<const FMessage> Message) const
+void FPublisher::Publish(const FMessage& Message) const
 {
 	FMessageManager::Get()->GetMediator().Publish(Message, Id());
 }
