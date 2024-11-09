@@ -3,24 +3,24 @@
 
 #include "AndroidBridge.h"
 
-FDelegate_Native_Handler DelNativeTextCallback;
+FDelegate_Native_Handler DelNativeAndroidCallback;
 
 FAndroidBridge::FAndroidBridge()
 {
 #if PLATFORM_ANDROID
-	JNIEnv = MakeShareable(AndroidJavaEnv::GetJavaEnv());
+	JNIEnv = AndroidJavaEnv::GetJavaEnv();
 	UE_LOG(LogTemp, Display, TEXT("Find java class : com/minisdk/pubsub/unreal/NativeBridge"))
 	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/unreal/NativeBridge");
 	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
 	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
-	SendTextMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;)V");
+	SendMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;Ljava/lang/String;)V");
 	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass"))
 	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
 	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass ok"))
 #endif
-	DelNativeTextCallback.BindLambda([this](const FString& Info, const FString& Data)
+	DelNativeAndroidCallback.BindLambda([this](const FString& Info, const FString& Data)
 	{
-		// this->NativeHandle.Execute(Text);
+		bool _ = this->NativeHandle.ExecuteIfBound(Info, Data);
 	});
 	// DelNativeDataCallback.BindLambda([this](const TArray<byte>& Data)
 	// {
@@ -30,23 +30,33 @@ FAndroidBridge::FAndroidBridge()
 
 FAndroidBridge::~FAndroidBridge()
 {
+#if PLATFORM_ANDROID
+	// JNIEnv->DeleteLocalRef(SendMessageMethod);
+	JNIEnv->DeleteLocalRef(AndroidBridgeObject);
+#endif
 }
 
 void FAndroidBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_ANDROID
-	std::string StdText(TCHAR_TO_UTF8(*Text));
-	jstring JavaText = JNIEnv->NewStringUTF(StdText.c_str());
-	JNIEnv->CallVoidMethod(AndroidBridgeObject, SendTextMethod, JavaText);
-	JNIEnv->DeleteLocalRef(JavaText);
+	std::string StdInfo(TCHAR_TO_UTF8(*Info));
+	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
+
+	std::string StdData(TCHAR_TO_UTF8(*Data));
+	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
+	
+	JNIEnv->CallVoidMethod(AndroidBridgeObject, SendMessageMethod, JavaInfo, JavaData);
+	JNIEnv->DeleteLocalRef(JavaInfo);
+	JNIEnv->DeleteLocalRef(JavaData);
 #endif
 }
 
 #if PLATFORM_ANDROID
-JNI_METHOD void Java_com_minisdk_pubsub_unreal_NativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Text)
+JNI_METHOD void Java_com_minisdk_pubsub_unreal_NativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
 {
-	FString UnrealText = FJavaHelper::FStringFromLocalRef(jenv, Text);
-	DelNativeTextCallback.Execute(UnrealText);
+	FString UnrealInfo = FJavaHelper::FStringFromLocalRef(jenv, Info);
+	FString UnrealData = FJavaHelper::FStringFromLocalRef(jenv, Data);
+	DelNativeAndroidCallback.Execute(UnrealInfo, UnrealData);
 }
 // JNI_METHOD void Java_com_pj_pubsub_unreal_NativeBridge_nativeDataCallback(JNIEnv* jenv, jobject Obj, jbyteArray jDataArray)
 // {

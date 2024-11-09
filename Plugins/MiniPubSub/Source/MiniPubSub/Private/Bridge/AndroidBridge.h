@@ -14,9 +14,9 @@
 class FAndroidBridge : public INativeBridge
 {
 #if PLATFORM_ANDROID
-	TSharedPtr<JNIEnv> JNIEnv;
+	JNIEnv* JNIEnv;
 	jobject AndroidBridgeObject;
-	jmethodID SendTextMethod;
+	jmethodID SendMessageMethod;
 #endif
 
 public:
