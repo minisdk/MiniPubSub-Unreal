@@ -7,7 +7,7 @@ UNativeManager* UNativeManager::Instance = nullptr;
 void UNativeManager::OnSendToast(const FMessage& Message)
 {
 	TMessage<FToastResult> Result = TMessage<FToastResult>(Message);
-	UE_LOG(LogTemp, Display, TEXT("Toast Show Count : %d"), Result.Data().ToastShowCount)
+	UE_LOG(LogTemp, Display, TEXT("Toast Show Count : %d"), Result.Data().ToastCount)
 }
 
 UNativeManager::~UNativeManager()

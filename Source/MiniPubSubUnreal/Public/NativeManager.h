@@ -28,7 +28,7 @@ struct FToastResult
 	GENERATED_BODY()
 
 	UPROPERTY()
-	int ToastShowCount;
+	int ToastCount;
 };
 
 UCLASS()
