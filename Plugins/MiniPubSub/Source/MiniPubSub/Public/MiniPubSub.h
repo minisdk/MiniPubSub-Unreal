@@ -8,8 +8,6 @@
 
 class FMiniPubSubModule : public IModuleInterface
 {
-private:
-	FNativeRelay* NativeRelay;
 public:
 
 	/** IModuleInterface implementation */

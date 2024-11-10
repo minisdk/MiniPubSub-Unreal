@@ -21,6 +21,7 @@ void FNativeRelay::OnWatch(const FMessage& Message) const
 
 FNativeRelay::FNativeRelay()
 {
+	UE_LOG(LogTemp, Display, TEXT("FNativeRelay create"))
 	Mobile = MakeShareable(new FMobile());
 	Watcher = MakeShareable(new FWatcher());
 	Watcher->Watch(FReceiveDelegate::CreateRaw(this, &FNativeRelay::OnWatch));
@@ -29,5 +30,6 @@ FNativeRelay::FNativeRelay()
 
 FNativeRelay::~FNativeRelay()
 {
+	UE_LOG(LogTemp, Display, TEXT("FNativeRelay destroy"))
 	Watcher->Unwatch();
 }

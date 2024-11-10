@@ -17,24 +17,18 @@ FMobile::FMobile()
 	this->Bridge = MakeShareable(new FIOSBridge());
 #else
 #endif
-	// this->Bridge->DelNativeTextHandle.BindLambda([this](const FString& Text)
-	// {
-	// 	this->DelNativeTextHandle.Execute(Text);
-	// });
 }
-
-// TSharedRef<FMobileBridge> FMobileBridge::Get()
-// {
-// 	static TSharedRef<FMobileBridge> MobileBridge = MakeShareable(new FMobileBridge());
-// 	return MobileBridge;
-// }
 
 void FMobile::Send(const FString& Info, const FString& Data)
 {
+#if PLATFORM_ANDROID || PLATFORM_IOS
 	this->Bridge.Get()->Send(Info, Data);
+#endif
 }
 
 void FMobile::BindNative(const FDelegate_Native_Handler& Handle)
 {
+#if PLATFORM_ANDROID || PLATFORM_IOS
 	this->Bridge->NativeHandle = Handle;
+#endif
 }
