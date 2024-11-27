@@ -39,6 +39,8 @@ class MINIPUBSUBUNREAL_API UNativeManager : public UObject
 	void OnSendToast(const FMessage& Message);
 
 	static UNativeManager* Instance;
+
+	void InitializeModule();
 public:
 	~UNativeManager();
 	

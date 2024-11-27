@@ -9,8 +9,7 @@ FAndroidBridge::FAndroidBridge()
 {
 #if PLATFORM_ANDROID
 	JNIEnv = AndroidJavaEnv::GetJavaEnv();
-	UE_LOG(LogTemp, Display, TEXT("Find java class : com/minisdk/pubsub/unreal/NativeBridge"))
-	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/unreal/NativeBridge");
+	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/bridge/unreal/NativeBridge");
 	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
 	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
 	SendMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;Ljava/lang/String;)V");
@@ -22,16 +21,11 @@ FAndroidBridge::FAndroidBridge()
 	{
 		bool _ = this->NativeHandle.ExecuteIfBound(Info, Data);
 	});
-	// DelNativeDataCallback.BindLambda([this](const TArray<byte>& Data)
-	// {
-	// 	this->DelNativeDataHandle.Execute(Data);
-	// });
 }
 
 FAndroidBridge::~FAndroidBridge()
 {
 #if PLATFORM_ANDROID
-	// JNIEnv->DeleteLocalRef(SendMessageMethod);
 	JNIEnv->DeleteLocalRef(AndroidBridgeObject);
 #endif
 }
@@ -52,22 +46,10 @@ void FAndroidBridge::Send(const FString& Info, const FString& Data)
 }
 
 #if PLATFORM_ANDROID
-JNI_METHOD void Java_com_minisdk_pubsub_unreal_NativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
+JNI_METHOD void Java_com_minisdk_pubsub_bridge_unreal_NativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
 {
 	FString UnrealInfo = FJavaHelper::FStringFromLocalRef(jenv, Info);
 	FString UnrealData = FJavaHelper::FStringFromLocalRef(jenv, Data);
 	DelNativeAndroidCallback.Execute(UnrealInfo, UnrealData);
 }
-// JNI_METHOD void Java_com_pj_pubsub_unreal_NativeBridge_nativeDataCallback(JNIEnv* jenv, jobject Obj, jbyteArray jDataArray)
-// {
-// 	jbyte* jData = jenv->GetByteArrayElements(jDataArray, NULL);
-// 	jsize Length = jenv->GetArrayLength(jDataArray);
-//
-// 	TArray<byte> Data((size_t)Length);
-// 	for(jsize i = 0; i < Length; i++)
-// 	{
-// 		Data[i] = jData[i];
-// 	}
-// 	DelNativeDataCallback.Excute(Data);
-// }
 #endif
