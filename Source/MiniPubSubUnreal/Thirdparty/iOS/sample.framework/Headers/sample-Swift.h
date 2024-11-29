@@ -299,8 +299,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
-SWIFT_CLASS("_TtC6sample6Loader")
-@interface Loader : NSObject
+SWIFT_CLASS("_TtC6sample15SampleKitLoader")
+@interface SampleKitLoader : NSObject
 + (void)loadModule;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end

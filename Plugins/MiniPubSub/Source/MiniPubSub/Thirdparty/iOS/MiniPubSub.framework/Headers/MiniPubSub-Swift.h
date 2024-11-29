@@ -310,6 +310,13 @@ SWIFT_CLASS("_TtC10MiniPubSub9GameRelay")
 @end
 
 
+SWIFT_CLASS("_TtC10MiniPubSub12ModuleHolder")
+@interface ModuleHolder : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
 SWIFT_PROTOCOL("_TtP10MiniPubSub13SwiftCallback_")
 @protocol SwiftCallback
 - (void)fromSwiftWithInfo:(NSString * _Nonnull)info data:(NSString * _Nonnull)data;

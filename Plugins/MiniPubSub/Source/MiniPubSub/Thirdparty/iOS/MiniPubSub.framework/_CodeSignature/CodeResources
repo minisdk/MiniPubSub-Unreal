@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/MiniPubSub-Swift.h</key>
 		<data>
-		QgSbf7KgbyFAslM2qXSJsM0bE40=
+		0jkc2TVJ20rfj+mtgqjrqeeREl0=
 		</data>
 		<key>Headers/ObjcSide.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/MiniPubSub.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		6s1GhyXFCwANkLgfOK8ssEnDzhE=
+		aFmD/KbPIdzFBrpsH2J3TYgMgqY=
 		</data>
 		<key>Modules/MiniPubSub.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/MiniPubSub.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		rvzTELmVdy1JsSwY2JrOPLzwBvk=
+		IiQrVouu1okvpA88l4tdZK2BXSs=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -47,7 +47,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4pLAhgiahSG4H2Loyz/05F99yy+7Uexoo16Q8zXh3Vs=
+			YzRjVP+Zkf4k3kQIxkVda1SFfIrLKDmyfl82oAWG+oU=
 			</data>
 		</dict>
 		<key>Headers/ObjcSide.h</key>
@@ -68,7 +68,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			o4CxW82cICKTKpJ2YxYtqg0svv2phbkq1jBc3tbNgzQ=
+			L1DB5c+0e78T1TaRpyWLzj/atejKQA5lz06mVu4IhaM=
 			</data>
 		</dict>
 		<key>Modules/MiniPubSub.swiftmodule/arm64-apple-ios.abi.json</key>
@@ -89,7 +89,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pFOzZEV3K8nh3rdGooArB9vQHznLcp56w206WWY+6Mk=
+			Xtzs0tpC+fv6uF73B0/ykk7eS/JHmyLaCDjJvN9pGeU=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

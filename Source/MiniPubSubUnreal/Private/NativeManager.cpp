@@ -3,7 +3,10 @@
 #include "MiniPubSubUnreal/Public/NativeManager.h"
 #if PLATFORM_ANDROID
 #include "Android/AndroidJavaEnv.h"
+#elif PLATFORM_IOS
+#include "MiniPubSubUnreal/Thirdparty/iOS/sample.framework/Headers/sample-Swift.h"
 #endif
+
 UNativeManager* UNativeManager::Instance = nullptr;
 
 void UNativeManager::OnSendToast(const FMessage& Message)
@@ -17,9 +20,12 @@ void UNativeManager::InitializeModule()
 #if PLATFORM_ANDROID
 	JNIEnv* JNIEnv = AndroidJavaEnv::GetJavaEnv();
 	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/pj/sample/SampleKitLoader");
-	jmethodID InitializerMethodID = JNIEnv->GetStaticMethodID(AndroidBridgeClass, "Load", "()V");
+	jmethodID InitializerMethodID = JNIEnv->GetStaticMethodID(AndroidBridgeClass, "load", "()V");
 	JNIEnv->CallStaticVoidMethod(AndroidBridgeClass, InitializerMethodID, nullptr);
+#elif PLATFORM_IOS
+	[SampleKitLoader loadModule];
 #endif
+	
 }
 
 UNativeManager::~UNativeManager()
