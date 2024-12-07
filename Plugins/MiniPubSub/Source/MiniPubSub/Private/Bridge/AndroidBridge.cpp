@@ -9,13 +9,11 @@ FAndroidBridge::FAndroidBridge()
 {
 #if PLATFORM_ANDROID
 	JNIEnv = AndroidJavaEnv::GetJavaEnv();
-	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/bridge/unreal/NativeBridge");
+	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/bridge/UnrealNativeBridge");
 	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
 	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
 	SendMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;Ljava/lang/String;)V");
-	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass"))
 	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
-	UE_LOG(LogTemp, Display, TEXT("delete AndroidBridgeClass ok"))
 #endif
 	DelNativeAndroidCallback.BindLambda([this](const FString& Info, const FString& Data)
 	{
@@ -46,7 +44,7 @@ void FAndroidBridge::Send(const FString& Info, const FString& Data)
 }
 
 #if PLATFORM_ANDROID
-JNI_METHOD void Java_com_minisdk_pubsub_bridge_unreal_NativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
+JNI_METHOD void Java_com_minisdk_pubsub_bridge_UnrealNativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
 {
 	FString UnrealInfo = FJavaHelper::FStringFromLocalRef(jenv, Info);
 	FString UnrealData = FJavaHelper::FStringFromLocalRef(jenv, Data);
