@@ -77,22 +77,20 @@ void USampleBluprintLibrary::PubSubTest()
 	// Messenger2.Unsubscribe(TEXT("M1"));
 }
 
+FNativeManager GNativeManager = FNativeManager();
 void USampleBluprintLibrary::PubSubInitTest()
 {
 	UE_LOG(LogTemp, Display, TEXT("PubSubInitTest!!"))
-	UNativeManager* NativeManager = UNativeManager::Get(); 
-	if(IsValid(NativeManager))
+	if(!GNativeManager.IsInitialized())
 	{
-		NativeManager->InitNativePubSub();
+		GNativeManager.Initialize();
+		GNativeManager.InitNativePubSub();
 	}
 	UE_LOG(LogTemp, Display, TEXT("PubSubInitTest end!!"))
 }
 
 void USampleBluprintLibrary::SendNativeTest(const FToastData& Data)
 {
-	UNativeManager* NativeManager = UNativeManager::Get();
-	if(IsValid(NativeManager))
-	{
-		NativeManager->ShowToast(Data);
-	}
+	if(GNativeManager.IsInitialized())
+	GNativeManager.ShowToast(Data);
 }

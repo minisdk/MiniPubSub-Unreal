@@ -7,16 +7,15 @@
 #include "MiniPubSubUnreal/Thirdparty/iOS/sample.framework/Headers/sample-Swift.h"
 #endif
 
-UNativeManager* UNativeManager::Instance = nullptr;
-
-void UNativeManager::OnSendToast(const FMessage& Message)
+void FNativeManager::OnSendToast(const FMessage& Message)
 {
 	TMessage<FToastResult> Result = TMessage<FToastResult>(Message);
 	UE_LOG(LogTemp, Display, TEXT("Toast Show Count : %d"), Result.Data().ToastCount)
 }
 
-void UNativeManager::InitializeModule()
+void FNativeManager::Initialize()
 {
+	FModuleBase::Initialize();
 #if PLATFORM_ANDROID
 	JNIEnv* JNIEnv = AndroidJavaEnv::GetJavaEnv();
 	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/pj/sample/SampleKitLoader");
@@ -25,30 +24,14 @@ void UNativeManager::InitializeModule()
 #elif PLATFORM_IOS
 	[SampleKitLoader loadModule];
 #endif
-	
 }
 
-UNativeManager::~UNativeManager()
+void FNativeManager::InitNativePubSub()
 {
-	Instance = nullptr;
+	NativeMessenger.Subscribe(TEXT("SEND_TOAST_RESULT"), FReceiveDelegate::CreateRaw(this, &FNativeManager::OnSendToast));
 }
 
-UNativeManager* UNativeManager::Get()
-{
-	if(Instance == nullptr)
-	{
-		Instance = NewObject<UNativeManager>();
-	}
-	return Instance;
-}
-
-void UNativeManager::InitNativePubSub()
-{
-	InitializeModule();
-	NativeMessenger.Subscribe(TEXT("SEND_TOAST_RESULT"), FReceiveDelegate::CreateUObject(this, &UNativeManager::OnSendToast));
-}
-
-void UNativeManager::ShowToast(const FToastData& Toast)
+void FNativeManager::ShowToast(const FToastData& Toast)
 {
 	NativeMessenger.Publish(TMessage(TEXT("SEND_TOAST"), Toast));
 }
