@@ -19,6 +19,11 @@
 			"Name": "MiniPubSub",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "MiniPubSubNative",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	]
 }

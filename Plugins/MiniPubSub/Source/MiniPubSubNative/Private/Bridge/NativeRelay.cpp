@@ -19,17 +19,19 @@ void FNativeRelay::OnWatch(const FMessage& Message) const
 	
 }
 
-FNativeRelay::FNativeRelay()
-{
-	UE_LOG(LogTemp, Display, TEXT("FNativeRelay create"))
-	Mobile = MakeShareable(new FMobile());
-	Watcher = MakeShareable(new FWatcher());
-	Watcher->Watch(FReceiveDelegate::CreateRaw(this, &FNativeRelay::OnWatch));
-	Mobile->BindNative(FDelegate_Native_Handler::CreateRaw(this, &FNativeRelay::OnReceiveFromNative));
-}
-
 FNativeRelay::~FNativeRelay()
 {
 	UE_LOG(LogTemp, Display, TEXT("FNativeRelay destroy"))
 	Watcher->Unwatch();
+}
+
+void FNativeRelay::Initialize()
+{
+	FModuleBase::Initialize();
+	
+	UE_LOG(LogTemp, Display, TEXT("FNativeRelay create"))
+	Watcher = MakeShareable(new FWatcher());
+	Mobile = MakeShareable(new FMobile());
+	Watcher->Watch(FReceiveDelegate::CreateRaw(this, &FNativeRelay::OnWatch));
+	Mobile->BindNative(FDelegate_Native_Handler::CreateRaw(this, &FNativeRelay::OnReceiveFromNative));
 }

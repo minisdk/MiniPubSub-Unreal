@@ -1,8 +1,9 @@
 #pragma once
-#include "Mobile.h"
+#include "Bridge/Mobile.h"
+#include "Module/ModuleBase.h"
 #include "PubSub/Watcher.h"
 
-class FNativeRelay
+class FNativeRelay : public FModuleBase
 {
 private:
 	TSharedPtr<FMobile> Mobile;
@@ -12,7 +13,7 @@ private:
 	void OnWatch(const FMessage& Message) const;
 	
 public:
-	FNativeRelay();
-	~FNativeRelay();
+	virtual ~FNativeRelay() override;
+	virtual void Initialize() override;
 	
 };

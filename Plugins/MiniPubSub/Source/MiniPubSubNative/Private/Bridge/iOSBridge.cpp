@@ -3,7 +3,7 @@
 
 #include "iOSBridge.h"
 #if PLATFORM_IOS
-#include "MiniPubSub/Thirdparty/iOS/MiniPubSub.framework/Headers/ObjcSide.h"
+#include "MiniPubSubNative/Thirdparty/iOS/MiniPubSub.framework/Headers/ObjcSide.h"
 #endif
 FIOSBridge* FIOSBridge::Instance = nullptr;
 
