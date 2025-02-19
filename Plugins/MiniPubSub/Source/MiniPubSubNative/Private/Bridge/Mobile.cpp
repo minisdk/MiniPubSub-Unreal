@@ -9,7 +9,7 @@
 #endif
 
 
-FMobile::FMobile()
+MiniPubSub::FMobile::FMobile()
 {
 #if PLATFORM_ANDROID
 	this->Bridge = MakeShareable(new FAndroidBridge());
@@ -19,14 +19,14 @@ FMobile::FMobile()
 #endif
 }
 
-void FMobile::Send(const FString& Info, const FString& Data)
+void MiniPubSub::FMobile::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_ANDROID || PLATFORM_IOS
 	this->Bridge.Get()->Send(Info, Data);
 #endif
 }
 
-void FMobile::BindNative(const FDelegate_Native_Handler& Handle)
+void MiniPubSub::FMobile::BindNative(const FDelegate_Native_Handler& Handle)
 {
 #if PLATFORM_ANDROID || PLATFORM_IOS
 	this->Bridge->NativeHandle = Handle;

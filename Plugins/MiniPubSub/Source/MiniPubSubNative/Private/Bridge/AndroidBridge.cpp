@@ -3,9 +3,9 @@
 
 #include "AndroidBridge.h"
 
-FDelegate_Native_Handler DelNativeAndroidCallback;
+MiniPubSub::FDelegate_Native_Handler DelNativeAndroidCallback;
 
-FAndroidBridge::FAndroidBridge()
+MiniPubSub::FAndroidBridge::FAndroidBridge()
 {
 #if PLATFORM_ANDROID
 	JNIEnv = AndroidJavaEnv::GetJavaEnv();
@@ -21,14 +21,14 @@ FAndroidBridge::FAndroidBridge()
 	});
 }
 
-FAndroidBridge::~FAndroidBridge()
+MiniPubSub::FAndroidBridge::~FAndroidBridge()
 {
 #if PLATFORM_ANDROID
 	JNIEnv->DeleteLocalRef(AndroidBridgeObject);
 #endif
 }
 
-void FAndroidBridge::Send(const FString& Info, const FString& Data)
+void MiniPubSub::FAndroidBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_ANDROID
 	std::string StdInfo(TCHAR_TO_UTF8(*Info));

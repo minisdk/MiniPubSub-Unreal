@@ -1,17 +1,20 @@
 #pragma once
 #include "Receiver.h"
 
-class FMessageMediator
+namespace MiniPubSub
 {
-private:
-	TMap<FString, TArray<FReceiver>> ReceiverDic = TMap<FString, TArray<FReceiver>>();
-	TMap<int, FReceiver> WatcherDic = TMap<int, FReceiver>();
-public:
-	void Register(const FReceiver& Receiver);
-	void Unregister(const int& Id, const FString& Key);
+	class MINIPUBSUB_API FMessageMediator
+	{
+	
+		TMap<FString, TArray<FReceiver>> ReceiverMap = TMap<FString, TArray<FReceiver>>();
+		TMap<FString, FReceiver> InstantReceiverMap = TMap<FString, FReceiver>();
+		
+	public:
+		void Register(const FReceiver& Receiver);
+		void Unregister(const int& Id, const FString& Key);
+		void RegisterInstant(FReceiver&& Receiver);
 
-	void Watch(const FReceiver& Receiver);
-	void Unwatch(const int& Id);
+		void Broadcast(const FRequest& Request);
+	};	
+}
 
-	void Publish(const FMessage& Message, const int& PublisherId);
-};

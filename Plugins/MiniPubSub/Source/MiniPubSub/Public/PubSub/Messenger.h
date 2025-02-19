@@ -2,18 +2,13 @@
 #include "Publisher.h"
 #include "Receiver.h"
 
-class MINIPUBSUB_API FMessenger final: INode
+namespace MiniPubSub
 {
-private:
-	const FPublisher Publisher; 
-	
-public:
-	FMessenger()
-	:Publisher(FPublisher()){}
+	class MINIPUBSUB_API FMessenger final: public FPublisher
+	{
+	public:
+		void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate);
+		void Unsubscribe(const FString& Key);
+	};
 
-	virtual const int Id() const override;
-	void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate);
-	void Unsubscribe(const FString& Key);
-
-	void Publish(const FMessage& Message) const;
-};
+}

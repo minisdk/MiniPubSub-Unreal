@@ -2,17 +2,12 @@
 #include "Publisher.h"
 #include "Receiver.h"
 
-class MINIPUBSUB_API FWatcher final : INode
+namespace  MiniPubSub
 {
-private:
-	const FPublisher Publisher;	
-public:
-	FWatcher()
-	:Publisher(FPublisher()){}
-	
-	virtual const int Id() const override;
-	void Watch(const FReceiveDelegate& ReceiveDelegate);
-	void Unwatch();
-
-	void Publish(const FMessage& Message) const;
-};
+	class MINIPUBSUB_API FWatcher final : public FNode
+	{
+	public:
+		void Watch(const FReceiveDelegate& ReceiveDelegate);
+		void Unwatch();
+	};
+}

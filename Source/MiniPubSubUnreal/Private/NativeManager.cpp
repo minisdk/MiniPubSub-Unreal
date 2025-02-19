@@ -1,16 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MiniPubSubUnreal/Public/NativeManager.h"
+
+#include "JsonObjectConverter.h"
 #if PLATFORM_ANDROID
 #include "Android/AndroidJavaEnv.h"
 #elif PLATFORM_IOS
 #include "MiniPubSubUnreal/Thirdparty/iOS/sample.framework/Headers/sample-Swift.h"
 #endif
 
-void FNativeManager::OnSendToast(const FMessage& Message)
+
+void FNativeManager::OnSendToast(const MiniPubSub::FRequest& Request)
 {
-	TMessage<FToastResult> Result = TMessage<FToastResult>(Message);
-	UE_LOG(LogTemp, Display, TEXT("Toast Show Count : %d"), Result.Data().ToastCount)
+	TSharedPtr<FJsonObject> JsonObject = Request.ToJsonObject();
+	if(JsonObject.IsValid())
+	{
+		FToastResult Result;
+		if(FJsonObjectConverter::JsonObjectToUStruct<FToastResult>(JsonObject.ToSharedRef(), &Result))
+		{
+			UE_LOG(LogTemp, Display, TEXT("Toast Show Count : %d"), Result.ToastCount)
+		}
+	}
 }
 
 void FNativeManager::Initialize()
@@ -28,10 +38,37 @@ void FNativeManager::Initialize()
 
 void FNativeManager::InitNativePubSub()
 {
-	NativeMessenger.Subscribe(TEXT("SEND_TOAST_RESULT"), FReceiveDelegate::CreateRaw(this, &FNativeManager::OnSendToast));
+	NativeMessenger.Subscribe(TEXT("SEND_TOAST_RESULT"), MiniPubSub::FReceiveDelegate::CreateRaw(this, &FNativeManager::OnSendToast));
 }
 
 void FNativeManager::ShowToast(const FToastData& Toast)
 {
-	NativeMessenger.Publish(TMessage(TEXT("SEND_TOAST"), Toast));
+	// FJsonObjectConverter::UStructToJsonObject()
+
+	TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(Toast);
+	if(JsonObject.IsValid())
+	{
+		MiniPubSub::FMessage Message = MiniPubSub::FMessage::FromJsonObject(JsonObject.ToSharedRef());
+		NativeMessenger.Publish(TEXT("SEND_TOAST"), Message);
+	}
+}
+
+void FNativeManager::ShowToastAsync(const FToastData& Toast)
+{
+	TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(Toast);
+	if(JsonObject.IsValid())
+	{
+		MiniPubSub::FMessage Message = MiniPubSub::FMessage::FromJsonObject(JsonObject.ToSharedRef());
+		NativeMessenger.Publish(TEXT("SEND_TOAST"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FRequest& Request)
+		{
+			TSharedPtr<FJsonObject> JsonObject = Request.ToJsonObject();
+			if(!JsonObject.IsValid())
+			{
+				return;
+			}
+			FToastResult Result;
+			FJsonObjectConverter::JsonObjectToUStruct<FToastResult>(JsonObject.ToSharedRef(), &Result);
+			UE_LOG(LogTemp, Display, TEXT("Toast Show Async Count : %d"), Result.ToastCount)
+		}));
+	}
 }

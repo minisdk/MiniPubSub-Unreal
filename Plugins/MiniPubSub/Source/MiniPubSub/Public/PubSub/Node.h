@@ -1,8 +1,13 @@
 #pragma once
 
-class MINIPUBSUB_API INode
+namespace MiniPubSub
 {
-public:
-	virtual ~INode(){};
-	virtual const int Id() const = 0;
-};
+	class MINIPUBSUB_API FNode
+	{
+		int NodeId;
+	public:
+		FNode();
+		virtual ~FNode() = default;
+		int GetId() const;
+	};
+}

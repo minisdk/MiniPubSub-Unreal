@@ -2,22 +2,13 @@
 
 #include "PubSub/MessageManager.h"
 
-const int FMessenger::Id() const
+
+void MiniPubSub::FMessenger::Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate)
 {
-	return this->Publisher.Id();
+	FMessageManager::Get()->GetMediator().Register(FReceiver(GetId(), Key, ReceiveDelegate));
 }
 
-void FMessenger::Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate)
+void MiniPubSub::FMessenger::Unsubscribe(const FString& Key)
 {
-	FMessageManager::Get()->GetMediator().Register(FReceiver(Id(), Key, ReceiveDelegate));
-}
-
-void FMessenger::Unsubscribe(const FString& Key)
-{
-	FMessageManager::Get()->GetMediator().Unregister(Id(), Key);
-}
-
-void FMessenger::Publish(const FMessage& Message) const
-{
-	Publisher.Publish(Message);
+	FMessageManager::Get()->GetMediator().Unregister(GetId(), Key);
 }

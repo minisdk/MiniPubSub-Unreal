@@ -1,31 +1,31 @@
 #include "Bridge/NativeRelay.h"
 #include "Bridge/Mobile.h"
+#include "PubSub/MessageManager.h"
 
-void FNativeRelay::OnReceiveFromNative(const FString& Info, const FString& Data) const
+void MiniPubSub::FNativeRelay::OnReceiveFromNative(const FString& Info, const FString& Data) const
 {
-	FMessageInfo Decoded;
-	FJsonObjectConverter::JsonObjectStringToUStruct(Info, &Decoded);
+	FRequestInfo Decoded;
+	Decoded.FromJson(Info);
 	UE_LOG(LogTemp, Display, TEXT("[Unreal] OnReceiveFromNative... decoded info key : %s"), *Decoded.Key)
-	Watcher->Publish(FMessage(Decoded, Data));
+
+	FNodeInfo NodeInfo(Decoded.NodeInfo.RequestOwnerId, Watcher->GetId());
+	FRequest Request(FRequestInfo(NodeInfo, Decoded.Key, Decoded.ResponseKey), Data);
+	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-void FNativeRelay::OnWatch(const FMessage& Message) const
+void MiniPubSub::FNativeRelay::OnWatch(const FRequest& Request) const
 {
-	FString InfoStr;
-	if(FJsonObjectConverter::UStructToJsonObjectString(Message.Info, InfoStr))
-	{
-		Mobile->Send(InfoStr, Message.Json);	
-	}
-	
+	FString InfoStr = Request.Info.ToJson();
+	Mobile->Send(InfoStr, Request.Json);
 }
 
-FNativeRelay::~FNativeRelay()
+MiniPubSub::FNativeRelay::~FNativeRelay()
 {
 	UE_LOG(LogTemp, Display, TEXT("FNativeRelay destroy"))
 	Watcher->Unwatch();
 }
 
-void FNativeRelay::Initialize()
+void MiniPubSub::FNativeRelay::Initialize()
 {
 	FModuleBase::Initialize();
 	

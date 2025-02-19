@@ -2,18 +2,27 @@
 
 #pragma once
 
-#include "Data/Message.h"
+#include "Data/Request.h"
 
-DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Message*/);
-
-struct MINIPUBSUB_API FReceiver final
+namespace MiniPubSub
 {
-	const int NodeId;
-	const FString Key;
-	const FReceiveDelegate ReceiveDelegate;
+	DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FRequest& /*Request*/);
 
-	FReceiver(const int& Id, const FString& Key, const FReceiveDelegate& Delegate)
-	: NodeId(Id)
-	, Key(Key)
-	, ReceiveDelegate(Delegate){}
-};
+	struct MINIPUBSUB_API FReceiver final
+	{
+		int NodeId;
+		FString Key;
+		FReceiveDelegate ReceiveDelegate;
+
+		FReceiver(): NodeId(-1)
+		{
+		}
+
+		FReceiver(const int& Id, const FString& Key, const FReceiveDelegate& Delegate)
+		: NodeId(Id)
+		, Key(Key)
+		, ReceiveDelegate(Delegate){}
+	};
+
+}
+

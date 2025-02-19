@@ -2,21 +2,28 @@
 
 #include "PubSub/MessageManager.h"
 
-static int GetId()
+void MiniPubSub::FPublisher::Publish(const FString& Key, const FMessage& Message) const
 {
-	static int Id = static_cast<int>(EPublisherType::Game);
-	return ++Id;
+
+	FNodeInfo Info;
+	Info.RequestOwnerId = GetId();
+	Info.PublisherId = GetId();
+	FRequest Request(Info, Key, Message.Json, "");
+	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-FPublisher::FPublisher()
-:NodeId(GetId())
-{}
-
-FPublisher::~FPublisher()
+void MiniPubSub::FPublisher::Publish(const FString& Key, const FMessage& Message, FReceiveDelegate ResponseCallback)
 {
+	static FIdCounter IdCounter = FIdCounter();
+	FString ResponseKey = FString::Printf(TEXT("%s_id%d"), *Key, IdCounter.GetNext());
+	
+	FNodeInfo Info;
+	Info.RequestOwnerId = GetId();
+	Info.PublisherId = GetId();
+	FRequest Request(Info, Key, Message.Json, "");
 }
 
-void FPublisher::Publish(const FMessage& Message) const
+void MiniPubSub::FPublisher::Respond(const FResponseInfo& ResponseInfo, const FMessage& Message)
 {
-	FMessageManager::Get()->GetMediator().Publish(Message, Id());
+	
 }

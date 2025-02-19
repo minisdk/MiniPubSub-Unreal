@@ -5,19 +5,22 @@
 #include "CoreMinimal.h"
 #include "Bridge/NativeBridge.h"
 
-/**
- * 
- */
-class FIOSBridge final : public INativeBridge
+namespace MiniPubSub
 {
-private:
-public:
-	static FIOSBridge* Instance;
-	
-	FIOSBridge();
-	virtual ~FIOSBridge() override;
-	
-	virtual void Send(const FString& Info, const FString& Data) override;
+	/**
+	 * 
+	 */
+	class FIOSBridge final : public INativeBridge
+	{
+	private:
+	public:
+		static FIOSBridge* Instance;
+		
+		FIOSBridge();
+		virtual ~FIOSBridge() override;
+		
+		virtual void Send(const FString& Info, const FString& Data) override;
 
-	// static void NativeCallback(const char* Text);
-};
+		// static void NativeCallback(const char* Text);
+	};
+}

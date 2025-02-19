@@ -35,8 +35,8 @@ struct FToastResult
 
 class MINIPUBSUBUNREAL_API FNativeManager final : public FModuleBase
 {
-	FMessenger NativeMessenger;
-	void OnSendToast(const FMessage& Message);
+	MiniPubSub::FMessenger NativeMessenger;
+	void OnSendToast(const MiniPubSub::FRequest& Request);
 
 public:
 	virtual ~FNativeManager() override = default;
@@ -44,4 +44,5 @@ public:
 	
 	void InitNativePubSub();
 	void ShowToast(const FToastData& Toast);
+	void ShowToastAsync(const FToastData& Toast);
 };

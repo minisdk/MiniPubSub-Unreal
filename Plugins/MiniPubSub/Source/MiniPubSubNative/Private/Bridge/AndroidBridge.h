@@ -7,21 +7,24 @@
 #if PLATFORM_ANDROID
 #include "Android/AndroidJavaEnv.h"
 #endif
-/**
- * 
- */
 
-class FAndroidBridge : public INativeBridge
+namespace MiniPubSub
 {
-#if PLATFORM_ANDROID
-	JNIEnv* JNIEnv;
-	jobject AndroidBridgeObject;
-	jmethodID SendMessageMethod;
-#endif
+	/**
+	 * 
+	 */
+	class FAndroidBridge : public INativeBridge
+	{
+	#if PLATFORM_ANDROID
+		JNIEnv* JNIEnv;
+		jobject AndroidBridgeObject;
+		jmethodID SendMessageMethod;
+	#endif
 
-public:
-	FAndroidBridge();
-	virtual ~FAndroidBridge() override;
+	public:
+		FAndroidBridge();
+		virtual ~FAndroidBridge() override;
 
-	virtual void Send(const FString& Info, const FString& Data) override;
-};
+		virtual void Send(const FString& Info, const FString& Data) override;
+	};
+}

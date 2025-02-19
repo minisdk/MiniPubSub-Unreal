@@ -1,7 +1,7 @@
 #pragma once
 #include "PubSub/Messenger.h"
 
-class MINIPUBSUB_API FModuleBase
+class FModuleBase
 {
 	bool bInitialized = false;
 	

@@ -2,22 +2,15 @@
 
 #include "PubSub/MessageManager.h"
 
-const int FWatcher::Id() const
+const FString WatcherKey = TEXT("Key_Watcher_Reserved");
+
+void MiniPubSub::FWatcher::Watch(const FReceiveDelegate& ReceiveDelegate)
 {
-	return Publisher.Id();
+	
+	FMessageManager::Get()->GetMediator().Register(FReceiver(GetId(), WatcherKey, ReceiveDelegate));
 }
 
-void FWatcher::Watch(const FReceiveDelegate& ReceiveDelegate)
+void MiniPubSub::FWatcher::Unwatch()
 {
-	FMessageManager::Get()->GetMediator().Watch(FReceiver(Id(), "", ReceiveDelegate));
-}
-
-void FWatcher::Unwatch()
-{
-	FMessageManager::Get()->GetMediator().Unwatch(Id());
-}
-
-void FWatcher::Publish(const FMessage& Message) const
-{
-	Publisher.Publish(Message);
+	FMessageManager::Get()->GetMediator().Unregister(GetId(), WatcherKey);
 }

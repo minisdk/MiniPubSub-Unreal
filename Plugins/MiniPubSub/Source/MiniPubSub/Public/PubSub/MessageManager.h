@@ -1,33 +1,25 @@
 #pragma once
 #include "MessageMediator.h"
 
-class MINIPUBSUB_API FMessageManager final
+namespace  MiniPubSub
 {
-private:
-	// static TSharedPtr<FMessageManager> Instance;
-
-	FMessageManager()
-	: Mediator(FMessageMediator()){}
-	FMessageManager(const FMessageManager& Other) = delete;
-	FMessageManager& operator=(const FMessageManager& Other) = delete;
-	FMessageManager(const FMessageManager&& Other) = delete;
-	FMessage& operator=(const FMessageManager&& Other) = delete;
-	
-	FMessageMediator Mediator;
-	
-public:
-	static TSharedPtr<FMessageManager> Get()
+	class MINIPUBSUB_API FMessageManager final
 	{
-		static TSharedPtr<FMessageManager> Instance;
-		if(Instance == nullptr || !Instance.IsValid())
-		{
-			Instance = MakeShareable(new FMessageManager());
-		}
-		return Instance;
-	}
+	private:
+		// TODO : cpp 만들어야함 : inline이될 수도 있음 -> 모듈 
+		FMessageManager()
+		: Mediator(FMessageMediator()){}
+		FMessageManager(const FMessageManager& Other) = delete;
+		FMessageManager& operator=(const FMessageManager& Other) = delete;
+		FMessageManager(const FMessageManager&& Other) = delete;
+		FMessageManager& operator=(const FMessageManager&& Other) = delete;
+	
+		FMessageMediator Mediator;
+	
+	public:
+		static TSharedPtr<FMessageManager> Get();
+		
+		FMessageMediator& GetMediator();
+	};	
+}
 
-	FMessageMediator& GetMediator() 
-	{
-		return Mediator;
-	}
-};

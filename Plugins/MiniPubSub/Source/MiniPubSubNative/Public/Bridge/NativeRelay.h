@@ -3,17 +3,21 @@
 #include "Module/ModuleBase.h"
 #include "PubSub/Watcher.h"
 
-class FNativeRelay : public FModuleBase
+namespace MiniPubSub
 {
-private:
-	TSharedPtr<FMobile> Mobile;
-	TSharedPtr<FWatcher> Watcher;
+	class FNativeRelay : public FModuleBase
+	{
+	private:
+		TSharedPtr<FMobile> Mobile;
+		TSharedPtr<FWatcher> Watcher;
 
-	void OnReceiveFromNative(const FString& Info, const FString& Data) const;
-	void OnWatch(const FMessage& Message) const;
+		void OnReceiveFromNative(const FString& Info, const FString& Data) const;
+		void OnWatch(const FRequest& Request) const;
 	
-public:
-	virtual ~FNativeRelay() override;
-	virtual void Initialize() override;
+	public:
+		virtual ~FNativeRelay() override;
+		virtual void Initialize() override;
 	
-};
+	};
+	
+}

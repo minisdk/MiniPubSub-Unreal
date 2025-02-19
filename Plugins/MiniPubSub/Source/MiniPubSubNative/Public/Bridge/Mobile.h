@@ -5,18 +5,23 @@
 #include "CoreMinimal.h"
 #include "Bridge/NativeBridge.h"
 
-/**
- * 
- */
-class FMobile
+
+namespace MiniPubSub
 {
-	TSharedPtr<INativeBridge> Bridge;
+	
+	/**
+	 * 
+	 */
+	class FMobile
+	{
+		TSharedPtr<INativeBridge> Bridge;
 
-public:
-	FMobile();
+	public:
+		FMobile();
 
-	// static TSharedRef<FMobileBridge> Get();
+		// static TSharedRef<FMobileBridge> Get();
 
-	void Send(const FString& Info, const FString& Data);
-	void BindNative(const FDelegate_Native_Handler& Handle);
-};
+		void Send(const FString& Info, const FString& Data);
+		void BindNative(const FDelegate_Native_Handler& Handle);
+	};
+}

@@ -1,14 +1,14 @@
 #include "PubSub/MessageMediator.h"
 
-void FMessageMediator::Register(const FReceiver& Receiver)
+void MiniPubSub::FMessageMediator::Register(const FReceiver& Receiver)
 {
-	ReceiverDic.FindOrAdd(Receiver.Key).Add(Receiver);
+	ReceiverMap.FindOrAdd(Receiver.Key).Add(Receiver);
 	
 }
 
-void FMessageMediator::Unregister(const int& Id, const FString& Key)
+void MiniPubSub::FMessageMediator::Unregister(const int& Id, const FString& Key)
 {
-	TArray<FReceiver>* Receivers = ReceiverDic.Find(Key);
+	TArray<FReceiver>* Receivers = ReceiverMap.Find(Key);
 	if(Receivers != nullptr)
 	{
 		Receivers->RemoveAll([Id](const FReceiver& Receiver)
@@ -18,32 +18,50 @@ void FMessageMediator::Unregister(const int& Id, const FString& Key)
 	}
 }
 
-void FMessageMediator::Watch(const FReceiver& Receiver)
-{
-	WatcherDic.Add(Receiver.NodeId, Receiver);
-}
+// void MiniPubSub::FMessageMediator::Watch(const FReceiver& Receiver)
+// {
+// 	WatcherDic.Add(Receiver.NodeId, Receiver);
+// }
+//
+// void FMessageMediator::Unwatch(const int& Id)
+// {
+// 	WatcherDic.Remove(Id);
+// }
 
-void FMessageMediator::Unwatch(const int& Id)
+void MiniPubSub::FMessageMediator::Broadcast(const FRequest& Request)
 {
-	WatcherDic.Remove(Id);
-}
-
-void FMessageMediator::Publish(const FMessage& Message, const int& PublisherId)
-{
-	if(TArray<FReceiver>* Receivers = ReceiverDic.Find(Message.Info.Key))
+	FReceiver InstantReceiver;
+	if(InstantReceiverMap.RemoveAndCopyValue(Request.GetKey(), InstantReceiver))
+	{
+		InstantReceiver.ReceiveDelegate.ExecuteIfBound(Request);
+		return;
+	}
+	
+	if(TArray<FReceiver>* Receivers = ReceiverMap.Find(Request.Info.Key))
 	{
 		for (FReceiver Receiver : *Receivers)
 		{
-			if(Receiver.NodeId == PublisherId)
+			if(Receiver.NodeId == Request.Info.NodeInfo.PublisherId)
 				continue;
-			bool _ = Receiver.ReceiveDelegate.ExecuteIfBound(Message);
+			Receiver.ReceiveDelegate.ExecuteIfBound(Request);
 		}
 	}
 
-	for (TTuple<int, FReceiver> Watcher : WatcherDic)
+	static FString WatcherKey = TEXT("Key_Watcher_Reserved");
+	if(TArray<FReceiver>* Watchers = ReceiverMap.Find(WatcherKey))
 	{
-		if(Watcher.Key == PublisherId)
-			continue;
-		bool _ = Watcher.Value.ReceiveDelegate.ExecuteIfBound(Message);
+		for(FReceiver Watcher : *Watchers)
+		{
+			if(Watcher.NodeId == Request.Info.NodeInfo.PublisherId)
+			{
+				continue;
+			}
+			Watcher.ReceiveDelegate.ExecuteIfBound(Request);
+		}
 	}
+}
+
+void MiniPubSub::FMessageMediator::RegisterInstant(FReceiver&& Receiver)
+{
+	InstantReceiverMap.Add(Receiver.Key, Receiver);
 }

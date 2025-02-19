@@ -4,68 +4,31 @@
 
 #include "CoreMinimal.h"
 #include "JsonObjectConverter.h"
-#include "Message.generated.h"
 
-USTRUCT()
-struct MINIPUBSUB_API FMessageInfo
+namespace MiniPubSub
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
-	FString Key;
-
-	FMessageInfo(){}
-	
-	FMessageInfo(const FString& Key)
-	: Key(Key)
-	{}
-};
-
-/**
- * FMessage is base message class
- */
-struct MINIPUBSUB_API FMessage
-{
-	const FMessageInfo Info;
-	FString Json;
-	
-	FMessage(const FMessageInfo& Info, const FString& Data)
-	: Info(Info)
-	, Json(Data)
-	{}
-	virtual ~FMessage(){};
-	
-protected:
-	explicit FMessage(const FString& Key)
-	: Info(FMessageInfo(Key))
-	{}
-};
-
-/**
- * TMessage contains serialized UStruct data.
- */
-template<typename DataType>
-struct MINIPUBSUB_API TMessage final :  FMessage
-{
-	TMessage(const FString& Key, const DataType& Data)
-	: FMessage(Key)
+	struct MINIPUBSUB_API FMessage
 	{
-		FJsonObjectConverter::UStructToJsonObjectString<DataType>(Data, this->Json);
-	}
+		FString Json;
 
-	explicit TMessage(const FMessage& Message)
-	:FMessage(Message)
-	{}
-	
-	virtual ~TMessage() override
-	{
-		
-	}
-	
-	DataType Data() const
-	{
-		DataType Data;
-		FJsonObjectConverter::JsonObjectStringToUStruct(this->Json, &Data);
-		return Data;
-	}
-};
+		explicit FMessage(const FString& InJson)
+			: Json(InJson)
+		{}
+
+		template<typename DataType>
+		static FMessage FromJsonSerializable(DataType Data)
+		{
+			static_assert(TIsDerivedFrom<DataType, FJsonSerializable>::Value, "DataType must be derived from FJsonSerializable");
+			return FMessage(Data.ToJson());
+		}
+
+		static FMessage FromJsonObject(const TSharedRef<FJsonObject>& JsonObject)
+		{
+			// JSonWriter
+			FString Json;
+			TSharedRef<TJsonWriter<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>> Writer = TJsonWriterFactory<TCHAR, TCondensedJsonPrintPolicy<TCHAR>>::Create(&Json);
+			FJsonSerializer::Serialize(JsonObject, Writer);
+			return FMessage(Json);
+		}
+	};
+}
