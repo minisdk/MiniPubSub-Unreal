@@ -3,7 +3,6 @@
 void MiniPubSub::FMessageMediator::Register(const FReceiver& Receiver)
 {
 	ReceiverMap.FindOrAdd(Receiver.Key).Add(Receiver);
-	
 }
 
 void MiniPubSub::FMessageMediator::Unregister(const int& Id, const FString& Key)

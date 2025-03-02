@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Module/ModuleBase.h"
 #include "PubSub/Messenger.h"
 #include "UObject/Object.h"
 #include "NativeManager.generated.h"
@@ -33,14 +32,13 @@ struct FToastResult
 };
 
 
-class MINIPUBSUBUNREAL_API FNativeManager final : public FModuleBase
+class MINIPUBSUBUNREAL_API FNativeManager final
 {
 	MiniPubSub::FMessenger NativeMessenger;
 	void OnSendToast(const MiniPubSub::FRequest& Request);
 
 public:
-	virtual ~FNativeManager() override = default;
-	virtual void Initialize() override;
+	void Initialize();
 	
 	void InitNativePubSub();
 	void ShowToast(const FToastData& Toast);

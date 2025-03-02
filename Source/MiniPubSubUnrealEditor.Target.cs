@@ -8,7 +8,7 @@ public class MiniPubSubUnrealEditorTarget : TargetRules
 	public MiniPubSubUnrealEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
+		DefaultBuildSettings = BuildSettingsVersion.V2;
 
 		ExtraModuleNames.AddRange( new string[] { "MiniPubSubUnreal" } );
 	}

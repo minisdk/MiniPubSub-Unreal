@@ -27,8 +27,6 @@ MiniPubSub::FNativeRelay::~FNativeRelay()
 
 void MiniPubSub::FNativeRelay::Initialize()
 {
-	FModuleBase::Initialize();
-	
 	UE_LOG(LogTemp, Display, TEXT("FNativeRelay create"))
 	Watcher = MakeShareable(new FWatcher());
 	Mobile = MakeShareable(new FMobile());

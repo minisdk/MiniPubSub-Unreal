@@ -5,8 +5,7 @@
 
 MiniPubSub::FNode::FNode()
 {
-	FIdCounter GIdCounter = FIdCounter();
-	NodeId = GIdCounter.GetNext();
+	NodeId = FIdCounter::GetNext();
 }
 
 int MiniPubSub::FNode::GetId() const

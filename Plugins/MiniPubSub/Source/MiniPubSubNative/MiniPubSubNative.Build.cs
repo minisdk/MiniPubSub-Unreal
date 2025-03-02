@@ -43,7 +43,7 @@ public class MiniPubSubNative : ModuleRules
 			
             const string frameworkName = "Thirdparty/iOS/MiniPubSub.framework";
             string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
-            PublicAdditionalFrameworks.Add(new Framework("MiniPubSub", frameworkPath, Framework.FrameworkMode.LinkAndCopy));
+            PublicAdditionalFrameworks.Add(new Framework("MiniPubSub", frameworkPath));
         }
     }
 }

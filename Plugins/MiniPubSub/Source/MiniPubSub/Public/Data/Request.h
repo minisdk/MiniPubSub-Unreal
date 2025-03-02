@@ -1,4 +1,5 @@
 #pragma once
+#include "Serialization/JsonSerializerMacros.h"
 
 namespace MiniPubSub
 {

@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+using System;
 using System.IO;
 using Internal;
 using UnrealBuildTool;
@@ -34,7 +35,7 @@ public class MiniPubSubUnreal : ModuleRules
         {
 	        string frameworkName = "Thirdparty/iOS/sample.framework";
 	        string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
-	        PublicAdditionalFrameworks.Add(new Framework("sample", frameworkPath, Framework.FrameworkMode.LinkAndCopy));
+	        PublicAdditionalFrameworks.Add(new Framework("sample", frameworkPath));
 		}
 	}
 }

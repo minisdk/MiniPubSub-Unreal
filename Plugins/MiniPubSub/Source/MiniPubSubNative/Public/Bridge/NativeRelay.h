@@ -1,11 +1,10 @@
 #pragma once
 #include "Bridge/Mobile.h"
-#include "Module/ModuleBase.h"
 #include "PubSub/Watcher.h"
 
 namespace MiniPubSub
 {
-	class FNativeRelay : public FModuleBase
+	class FNativeRelay final
 	{
 	private:
 		TSharedPtr<FMobile> Mobile;
@@ -15,8 +14,8 @@ namespace MiniPubSub
 		void OnWatch(const FRequest& Request) const;
 	
 	public:
-		virtual ~FNativeRelay() override;
-		virtual void Initialize() override;
+		~FNativeRelay();
+		void Initialize();
 	
 	};
 	

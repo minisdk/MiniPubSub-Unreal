@@ -31,10 +31,7 @@ MiniPubSub::FAndroidBridge::~FAndroidBridge()
 void MiniPubSub::FAndroidBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_ANDROID
-	std::string StdInfo(TCHAR_TO_UTF8(*Info));
 	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
-
-	std::string StdData(TCHAR_TO_UTF8(*Data));
 	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
 	
 	JNIEnv->CallVoidMethod(AndroidBridgeObject, SendMessageMethod, JavaInfo, JavaData);

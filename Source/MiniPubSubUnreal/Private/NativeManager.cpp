@@ -25,7 +25,6 @@ void FNativeManager::OnSendToast(const MiniPubSub::FRequest& Request)
 
 void FNativeManager::Initialize()
 {
-	FModuleBase::Initialize();
 #if PLATFORM_ANDROID
 	JNIEnv* JNIEnv = AndroidJavaEnv::GetJavaEnv();
 	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/pj/sample/SampleKitLoader");
@@ -59,15 +58,15 @@ void FNativeManager::ShowToastAsync(const FToastData& Toast)
 	if(JsonObject.IsValid())
 	{
 		MiniPubSub::FMessage Message = MiniPubSub::FMessage::FromJsonObject(JsonObject.ToSharedRef());
-		NativeMessenger.Publish(TEXT("SEND_TOAST"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FRequest& Request)
+		NativeMessenger.Publish(TEXT("SEND_TOAST_ASYNC"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FRequest& Request)
 		{
-			TSharedPtr<FJsonObject> JsonObject = Request.ToJsonObject();
-			if(!JsonObject.IsValid())
+			TSharedPtr<FJsonObject> ReceivedJsonObject = Request.ToJsonObject();
+			if(!ReceivedJsonObject.IsValid())
 			{
 				return;
 			}
 			FToastResult Result;
-			FJsonObjectConverter::JsonObjectToUStruct<FToastResult>(JsonObject.ToSharedRef(), &Result);
+			FJsonObjectConverter::JsonObjectToUStruct<FToastResult>(ReceivedJsonObject.ToSharedRef(), &Result);
 			UE_LOG(LogTemp, Display, TEXT("Toast Show Async Count : %d"), Result.ToastCount)
 		}));
 	}
