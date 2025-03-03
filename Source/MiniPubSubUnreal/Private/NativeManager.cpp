@@ -6,7 +6,11 @@
 #if PLATFORM_ANDROID
 #include "Android/AndroidJavaEnv.h"
 #elif PLATFORM_IOS
-#include "MiniPubSubUnreal/Thirdparty/iOS/sample.framework/Headers/sample-Swift.h"
+// #include "MiniPubSubUnreal/Thirdparty/iOS/sample.framework/Headers/sample-Swift.h"
+extern "C"
+{
+	void Load();
+}
 #endif
 
 
@@ -31,7 +35,7 @@ void FNativeManager::Initialize()
 	jmethodID InitializerMethodID = JNIEnv->GetStaticMethodID(AndroidBridgeClass, "load", "()V");
 	JNIEnv->CallStaticVoidMethod(AndroidBridgeClass, InitializerMethodID, nullptr);
 #elif PLATFORM_IOS
-	[SampleKitLoader loadModule];
+	Load();
 #endif
 }
 

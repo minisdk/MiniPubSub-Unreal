@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using Internal;
 using UnrealBuildTool;
 
 public class MiniPubSubUnreal : ModuleRules
@@ -33,7 +32,9 @@ public class MiniPubSubUnreal : ModuleRules
 		}
 		else if(Target.Platform == UnrealTargetPlatform.IOS)
         {
-	        string frameworkName = "Thirdparty/iOS/sample.framework";
+	        // PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "ThirdParty/iOS"));
+	        
+	        string frameworkName = "Thirdparty/iOS/sample-1.0.embeddedframework.zip";
 	        string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
 	        PublicAdditionalFrameworks.Add(new Framework("sample", frameworkPath));
 		}

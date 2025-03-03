@@ -37,11 +37,12 @@ public class MiniPubSubNative : ModuleRules
         }
         else if (Target.Platform == UnrealTargetPlatform.IOS)
         {
+            // PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "ThirdParty/iOS"));
             PublicSystemLibraryPaths.Add("/usr/lib/swift");
             PublicSystemLibraryPaths.Add("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos");
             PublicSystemLibraryPaths.Add("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/iphoneos");
 			
-            const string frameworkName = "Thirdparty/iOS/MiniPubSub.framework";
+            const string frameworkName = "Thirdparty/iOS/MiniPubSub-1.0.embeddedframework.zip";
             string frameworkPath = Path.Combine(ModuleDirectory, frameworkName);
             PublicAdditionalFrameworks.Add(new Framework("MiniPubSub", frameworkPath));
         }

@@ -3,7 +3,13 @@
 
 #include "iOSBridge.h"
 #if PLATFORM_IOS
-#include "MiniPubSubNative/Thirdparty/iOS/MiniPubSub.framework/Headers/ObjcSide.h"
+using iOSNativeCallback = void (*)(const char* infoCStr, const char* dataCStr);
+extern "C"
+{
+	void Initialize(iOSNativeCallback NativeCallback);
+	void SendNative(const char* Info, const char* Json);
+}
+// #include "MiniPubSubNative/Thirdparty/iOS/MiniPubSub.framework/Headers/ObjcSide.h"
 #endif
 MiniPubSub::FIOSBridge* MiniPubSub::FIOSBridge::Instance = nullptr;
 
@@ -17,7 +23,8 @@ void NativeCallback(const char*  InfoText, const char* DataText)
 MiniPubSub::FIOSBridge::FIOSBridge()
 {
 #if PLATFORM_IOS
-	[[ObjcSide sharedInstance] initializeWith:&NativeCallback];
+	Initialize(&NativeCallback);
+	// [[ObjcSide sharedInstance] initializeWith:&NativeCallback];
 #endif
 	if(Instance == nullptr)
 	{
@@ -34,7 +41,8 @@ MiniPubSub::FIOSBridge::~FIOSBridge()
 void MiniPubSub::FIOSBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_IOS
-	[[ObjcSide sharedInstance] sendToNativeWithInfo:TCHAR_TO_UTF8(*Info) AndData: TCHAR_TO_UTF8(*Data)];
+	SendNative(TCHAR_TO_UTF8(*Info), TCHAR_TO_UTF8(*Data));
+	// [[ObjcSide sharedInstance] sendToNativeWithInfo:TCHAR_TO_UTF8(*Info) AndData: TCHAR_TO_UTF8(*Data)];
 #endif
 }
 
