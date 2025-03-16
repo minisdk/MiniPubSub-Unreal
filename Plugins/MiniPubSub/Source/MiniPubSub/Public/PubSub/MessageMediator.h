@@ -5,7 +5,6 @@ namespace MiniPubSub
 {
 	class MINIPUBSUB_API FMessageMediator
 	{
-	
 		TMap<FString, TArray<FReceiver>> ReceiverMap = TMap<FString, TArray<FReceiver>>();
 		TMap<FString, FReceiver> InstantReceiverMap = TMap<FString, FReceiver>();
 		
@@ -14,7 +13,7 @@ namespace MiniPubSub
 		void Unregister(const int& Id, const FString& Key);
 		void RegisterInstant(FReceiver&& Receiver);
 
-		void Broadcast(const FRequest& Request);
+		void Broadcast(const FMessage& Message);
 	};	
 }
 

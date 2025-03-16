@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "Data/Request.h"
+#include "Data/Message.h"
 
 namespace MiniPubSub
 {
-	DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FRequest& /*Request*/);
+	DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Request*/);
 
 	struct MINIPUBSUB_API FReceiver final
 	{

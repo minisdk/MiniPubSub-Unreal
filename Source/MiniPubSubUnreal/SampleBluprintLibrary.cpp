@@ -4,7 +4,7 @@
 #include "SampleBluprintLibrary.h"
 
 #include "JsonObjectConverter.h"
-#include "Data/Message.h"
+#include "Data/Payload.h"
 #include "Public/NativeManager.h"
 #include "PubSub/Messenger.h"
 

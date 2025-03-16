@@ -2,32 +2,33 @@
 
 #include "PubSub/MessageManager.h"
 
-void MiniPubSub::FPublisher::Publish(const FString& Key, const FMessage& Message) const
+void MiniPubSub::FPublisher::Publish(const FString& Key, const FPayload& Message) const
 {
 
 	FNodeInfo Info;
-	Info.RequestOwnerId = GetId();
+	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
-	FRequest Request(Info, Key, Message.Json, "");
+	FMessage Request(Info, Key, Message.Json, "");
 	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-void MiniPubSub::FPublisher::Publish(const FString& Key, const FMessage& Message, FReceiveDelegate ResponseCallback)
+void MiniPubSub::FPublisher::Publish(const FString& Key, const FPayload& Message, FReceiveDelegate ReplyCallback) const
 {
-	FString ResponseKey = FString::Printf(TEXT("%s_id%d"), *Key, FIdCounter::GetNext());
+	FString ReplyKey = FString::Printf(TEXT("%s_id%d"), *Key, FIdCounter::GetNext());
+	FMessageManager::Get()->GetMediator().RegisterInstant(FReceiver(-1, ReplyKey, ReplyCallback));
 	
 	FNodeInfo Info;
-	Info.RequestOwnerId = GetId();
+	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
-	FRequest Request(Info, Key, Message.Json, "");
+	FMessage Request(Info, Key, Message.Json, ReplyKey);
 	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-void MiniPubSub::FPublisher::Respond(const FResponseInfo& ResponseInfo, const FMessage& Message)
+void MiniPubSub::FPublisher::Reply(const FMessageInfo& ReceivedMessageInfo, const FPayload& Message) const
 {
 	FNodeInfo Info;
-	Info.RequestOwnerId = GetId();
+	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
-	FRequest Request(Info, ResponseInfo.Key, Message.Json, "");
+	FMessage Request(Info, ReceivedMessageInfo.ReplyKey, Message.Json, "");
 	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }

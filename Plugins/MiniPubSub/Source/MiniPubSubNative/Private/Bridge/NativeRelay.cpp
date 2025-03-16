@@ -4,19 +4,19 @@
 
 void MiniPubSub::FNativeRelay::OnReceiveFromNative(const FString& Info, const FString& Data) const
 {
-	FRequestInfo Decoded;
+	FMessageInfo Decoded;
 	Decoded.FromJson(Info);
 	UE_LOG(LogTemp, Display, TEXT("[Unreal] OnReceiveFromNative... decoded info key : %s"), *Decoded.Key)
 
-	FNodeInfo NodeInfo(Decoded.NodeInfo.RequestOwnerId, Watcher->GetId());
-	FRequest Request(FRequestInfo(NodeInfo, Decoded.Key, Decoded.ResponseKey), Data);
-	FMessageManager::Get()->GetMediator().Broadcast(Request);
+	FNodeInfo NodeInfo(Decoded.NodeInfo.MessageOwnerId, Watcher->GetId());
+	FMessage Message(FMessageInfo(NodeInfo, Decoded.Key, Decoded.ReplyKey), Data);
+	FMessageManager::Get()->GetMediator().Broadcast(Message);
 }
 
-void MiniPubSub::FNativeRelay::OnWatch(const FRequest& Request) const
+void MiniPubSub::FNativeRelay::OnWatch(const FMessage& Message) const
 {
-	FString InfoStr = Request.Info.ToJson();
-	Mobile->Send(InfoStr, Request.Json);
+	FString InfoStr = Message.Info.ToJson();
+	Mobile->Send(InfoStr, Message.Payload.Json);
 }
 
 MiniPubSub::FNativeRelay::~FNativeRelay()

@@ -14,9 +14,9 @@ extern "C"
 #endif
 
 
-void FNativeManager::OnSendToast(const MiniPubSub::FRequest& Request)
+void FNativeManager::OnSendToast(const MiniPubSub::FMessage& Message)
 {
-	TSharedPtr<FJsonObject> JsonObject = Request.ToJsonObject();
+	TSharedPtr<FJsonObject> JsonObject = Message.ToJsonObject();
 	if(JsonObject.IsValid())
 	{
 		FToastResult Result;
@@ -51,7 +51,7 @@ void FNativeManager::ShowToast(const FToastData& Toast)
 	TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(Toast);
 	if(JsonObject.IsValid())
 	{
-		MiniPubSub::FMessage Message = MiniPubSub::FMessage::FromJsonObject(JsonObject.ToSharedRef());
+		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
 		NativeMessenger.Publish(TEXT("SEND_TOAST"), Message);
 	}
 }
@@ -61,10 +61,10 @@ void FNativeManager::ShowToastAsync(const FToastData& Toast)
 	TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(Toast);
 	if(JsonObject.IsValid())
 	{
-		MiniPubSub::FMessage Message = MiniPubSub::FMessage::FromJsonObject(JsonObject.ToSharedRef());
-		NativeMessenger.Publish(TEXT("SEND_TOAST_ASYNC"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FRequest& Request)
+		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
+		NativeMessenger.Publish(TEXT("SEND_TOAST_ASYNC"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FMessage& Message)
 		{
-			TSharedPtr<FJsonObject> ReceivedJsonObject = Request.ToJsonObject();
+			TSharedPtr<FJsonObject> ReceivedJsonObject = Message.ToJsonObject();
 			if(!ReceivedJsonObject.IsValid())
 			{
 				return;

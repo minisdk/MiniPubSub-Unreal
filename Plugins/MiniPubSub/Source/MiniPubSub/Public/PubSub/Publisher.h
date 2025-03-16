@@ -1,7 +1,7 @@
 #pragma once
 #include "Node.h"
 #include "Receiver.h"
-#include "Data/Message.h"
+#include "Data/Payload.h"
 #include "Data/SdkType.h"
 
 namespace MiniPubSub
@@ -10,9 +10,9 @@ namespace MiniPubSub
 	{
 	public:
 		virtual ~FPublisher() override = default;
-		void Publish(const FString& Key, const FMessage& Message) const;
-		void Publish(const FString& Key, const FMessage& Message, FReceiveDelegate ResponseCallback);
-		void Respond(const FResponseInfo& ResponseInfo, const FMessage& Message);
+		void Publish(const FString& Key, const FPayload& Message) const;
+		void Publish(const FString& Key, const FPayload& Message, FReceiveDelegate ReplyCallback) const;
+		void Reply(const FMessageInfo& ReceivedMessageInfo, const FPayload& Message) const;
 	};
 
 }

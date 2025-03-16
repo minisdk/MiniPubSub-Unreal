@@ -11,7 +11,7 @@ namespace MiniPubSub
 		TSharedPtr<FWatcher> Watcher;
 
 		void OnReceiveFromNative(const FString& Info, const FString& Data) const;
-		void OnWatch(const FRequest& Request) const;
+		void OnWatch(const FMessage& Message) const;
 	
 	public:
 		~FNativeRelay();

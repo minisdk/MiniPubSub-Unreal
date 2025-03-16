@@ -27,22 +27,22 @@ void MiniPubSub::FMessageMediator::Unregister(const int& Id, const FString& Key)
 // 	WatcherDic.Remove(Id);
 // }
 
-void MiniPubSub::FMessageMediator::Broadcast(const FRequest& Request)
+void MiniPubSub::FMessageMediator::Broadcast(const FMessage& Message)
 {
 	FReceiver InstantReceiver;
-	if(InstantReceiverMap.RemoveAndCopyValue(Request.GetKey(), InstantReceiver))
+	if(InstantReceiverMap.RemoveAndCopyValue(Message.GetKey(), InstantReceiver))
 	{
-		InstantReceiver.ReceiveDelegate.ExecuteIfBound(Request);
+		InstantReceiver.ReceiveDelegate.ExecuteIfBound(Message);
 		return;
 	}
 	
-	if(TArray<FReceiver>* Receivers = ReceiverMap.Find(Request.Info.Key))
+	if(TArray<FReceiver>* Receivers = ReceiverMap.Find(Message.Info.Key))
 	{
 		for (FReceiver Receiver : *Receivers)
 		{
-			if(Receiver.NodeId == Request.Info.NodeInfo.PublisherId)
+			if(Receiver.NodeId == Message.Info.NodeInfo.PublisherId)
 				continue;
-			Receiver.ReceiveDelegate.ExecuteIfBound(Request);
+			Receiver.ReceiveDelegate.ExecuteIfBound(Message);
 		}
 	}
 
@@ -51,11 +51,11 @@ void MiniPubSub::FMessageMediator::Broadcast(const FRequest& Request)
 	{
 		for(FReceiver Watcher : *Watchers)
 		{
-			if(Watcher.NodeId == Request.Info.NodeInfo.PublisherId)
+			if(Watcher.NodeId == Message.Info.NodeInfo.PublisherId)
 			{
 				continue;
 			}
-			Watcher.ReceiveDelegate.ExecuteIfBound(Request);
+			Watcher.ReceiveDelegate.ExecuteIfBound(Message);
 		}
 	}
 }

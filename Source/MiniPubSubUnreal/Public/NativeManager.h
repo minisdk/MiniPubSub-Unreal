@@ -35,7 +35,7 @@ struct FToastResult
 class MINIPUBSUBUNREAL_API FNativeManager final
 {
 	MiniPubSub::FMessenger NativeMessenger;
-	void OnSendToast(const MiniPubSub::FRequest& Request);
+	void OnSendToast(const MiniPubSub::FMessage& Message);
 
 public:
 	void Initialize();
