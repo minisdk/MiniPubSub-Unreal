@@ -6,22 +6,31 @@
 
 namespace MiniPubSub
 {
-	DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Request*/);
+	DECLARE_DELEGATE_OneParam(FReceiveDelegate, const FMessage& /*Message*/);
 
 	struct MINIPUBSUB_API FReceiver final
 	{
 		int NodeId;
 		FString Key;
+		ESdkType Target;
 		FReceiveDelegate ReceiveDelegate;
 
-		FReceiver(): NodeId(-1)
+		FReceiver()
+		: NodeId(-1)
+		, Target(ESdkType::Game)
 		{
 		}
 
-		FReceiver(const int& Id, const FString& Key, const FReceiveDelegate& Delegate)
+		FReceiver(const int& Id, const FString& InKey, const ESdkType& InTarget, const FReceiveDelegate& Delegate)
 		: NodeId(Id)
-		, Key(Key)
+		, Key(InKey)
+		, Target(InTarget)
 		, ReceiveDelegate(Delegate){}
+
+		bool CanInvoke(FMessageInfo Info) const
+		{
+			return NodeId != Info.NodeInfo.PublisherId && Target == Info.Topic.GetTarget();
+		}
 	};
 
 }

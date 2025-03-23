@@ -36,13 +36,14 @@ void MiniPubSub::FMessageMediator::Broadcast(const FMessage& Message)
 		return;
 	}
 	
-	if(TArray<FReceiver>* Receivers = ReceiverMap.Find(Message.Info.Key))
+	if(TArray<FReceiver>* Receivers = ReceiverMap.Find(Message.Info.Topic.Key))
 	{
 		for (FReceiver Receiver : *Receivers)
 		{
-			if(Receiver.NodeId == Message.Info.NodeInfo.PublisherId)
-				continue;
-			Receiver.ReceiveDelegate.ExecuteIfBound(Message);
+			if(Receiver.CanInvoke(Message.Info))
+			{
+				Receiver.ReceiveDelegate.ExecuteIfBound(Message);
+			}
 		}
 	}
 
@@ -51,11 +52,10 @@ void MiniPubSub::FMessageMediator::Broadcast(const FMessage& Message)
 	{
 		for(FReceiver Watcher : *Watchers)
 		{
-			if(Watcher.NodeId == Message.Info.NodeInfo.PublisherId)
+			if(Watcher.CanInvoke(Message.Info))
 			{
-				continue;
+				Watcher.ReceiveDelegate.ExecuteIfBound(Message);
 			}
-			Watcher.ReceiveDelegate.ExecuteIfBound(Message);
 		}
 	}
 }

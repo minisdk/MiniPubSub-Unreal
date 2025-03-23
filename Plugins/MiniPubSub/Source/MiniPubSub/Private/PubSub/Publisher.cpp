@@ -2,33 +2,30 @@
 
 #include "PubSub/MessageManager.h"
 
-void MiniPubSub::FPublisher::Publish(const FString& Key, const FPayload& Message) const
+void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Message) const
 {
 
 	FNodeInfo Info;
 	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
-	FMessage Request(Info, Key, Message.Json, "");
+	FMessage Request(Info, Topic, DefaultTopic, Message.Json);
 	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-void MiniPubSub::FPublisher::Publish(const FString& Key, const FPayload& Message, FReceiveDelegate ReplyCallback) const
+void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Message, FReceiveDelegate ReplyCallback) const
 {
-	FString ReplyKey = FString::Printf(TEXT("%s_id%d"), *Key, FIdCounter::GetNext());
-	FMessageManager::Get()->GetMediator().RegisterInstant(FReceiver(-1, ReplyKey, ReplyCallback));
+	FString ReplyKey = FString::Printf(TEXT("%s_id%d"), *Topic.Key, FIdCounter::GetNext());
+	FTopic ReplyTopic{ReplyKey, ESdkType::Game};
+	FMessageManager::Get()->GetMediator().RegisterInstant(FReceiver(-1, ReplyKey, ESdkType::Game, ReplyCallback));
 	
 	FNodeInfo Info;
 	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
-	FMessage Request(Info, Key, Message.Json, ReplyKey);
+	FMessage Request(Info, Topic, ReplyTopic, Message.Json);
 	FMessageManager::Get()->GetMediator().Broadcast(Request);
 }
 
-void MiniPubSub::FPublisher::Reply(const FMessageInfo& ReceivedMessageInfo, const FPayload& Message) const
+void MiniPubSub::FPublisher::Reply(const FMessageInfo& ReceivedMessageInfo, const FPayload& Payload) const
 {
-	FNodeInfo Info;
-	Info.MessageOwnerId = GetId();
-	Info.PublisherId = GetId();
-	FMessage Request(Info, ReceivedMessageInfo.ReplyKey, Message.Json, "");
-	FMessageManager::Get()->GetMediator().Broadcast(Request);
+	this->Publish(ReceivedMessageInfo.Topic, Payload);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Payload.h"
+#include "Topic.h"
 #include "Serialization/JsonSerializerMacros.h"
 
 namespace MiniPubSub
@@ -26,21 +27,22 @@ namespace MiniPubSub
 	struct FMessageInfo final : FJsonSerializable
 	{
 		FNodeInfo NodeInfo;
-		FString Key;
-		FString ReplyKey;
+		FTopic Topic;
+		FTopic ReplyTopic;
 		BEGIN_JSON_SERIALIZER
 			JSON_SERIALIZE_OBJECT_SERIALIZABLE("nodeInfo", NodeInfo)
-			JSON_SERIALIZE("key", Key);
-			JSON_SERIALIZE("replyKey", ReplyKey);
+			JSON_SERIALIZE_OBJECT_SERIALIZABLE("topic", Topic);
+			JSON_SERIALIZE_OBJECT_SERIALIZABLE("replyTopic", ReplyTopic);
 		END_JSON_SERIALIZER
 
-		FMessageInfo(): NodeInfo()
-		{}
+		FMessageInfo(): NodeInfo(), Topic(DefaultTopic), ReplyTopic(DefaultTopic)
+		{
+		}
 
-		FMessageInfo(const FNodeInfo& InNodeInfo, const FString& InKey, const FString& InReplyKey)
+		FMessageInfo(const FNodeInfo& InNodeInfo, const FTopic& InTopic, const FTopic& InReplyTopic)
 		: NodeInfo(InNodeInfo)
-		, Key(InKey)
-		, ReplyKey(InReplyKey){}
+		, Topic(InTopic)
+		, ReplyTopic(InReplyTopic){}
 	};
 
 	struct FMessage final
@@ -50,7 +52,7 @@ namespace MiniPubSub
 
 		FString GetKey() const
 		{
-			return Info.Key;
+			return Info.Topic.Key;
 		}
 
 
@@ -76,8 +78,8 @@ namespace MiniPubSub
 		, Payload(InJson)
 		{}
 
-		FMessage(const FNodeInfo& InNodeInfo, const FString& InKey, const FString& InJson, const FString& InResponseKey)
-		: Info(FMessageInfo(InNodeInfo, InKey, InResponseKey))
+		FMessage(const FNodeInfo& InNodeInfo, const FTopic& InTopic, const FTopic& InReplyTopic, const FString& InJson)
+		: Info(FMessageInfo(InNodeInfo, InTopic, InReplyTopic))
 		, Payload(InJson)
 		{}
 		

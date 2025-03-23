@@ -52,7 +52,7 @@ void FNativeManager::ShowToast(const FToastData& Toast)
 	if(JsonObject.IsValid())
 	{
 		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
-		NativeMessenger.Publish(TEXT("SEND_TOAST"), Message);
+		NativeMessenger.Publish(MiniPubSub::FTopic(TEXT("SEND_TOAST"), MiniPubSub::ESdkType::Native), Message);
 	}
 }
 
@@ -62,7 +62,8 @@ void FNativeManager::ShowToastAsync(const FToastData& Toast)
 	if(JsonObject.IsValid())
 	{
 		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
-		NativeMessenger.Publish(TEXT("SEND_TOAST_ASYNC"), Message, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FMessage& Message)
+		NativeMessenger.Publish(MiniPubSub::FTopic(TEXT("SEND_TOAST_ASYNC"), MiniPubSub::ESdkType::Native), Message
+			, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FMessage& Message)
 		{
 			TSharedPtr<FJsonObject> ReceivedJsonObject = Message.ToJsonObject();
 			if(!ReceivedJsonObject.IsValid())

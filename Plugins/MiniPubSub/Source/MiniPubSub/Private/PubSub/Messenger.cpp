@@ -5,7 +5,7 @@
 
 void MiniPubSub::FMessenger::Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate)
 {
-	FMessageManager::Get()->GetMediator().Register(FReceiver(GetId(), Key, ReceiveDelegate));
+	FMessageManager::Get()->GetMediator().Register(FReceiver(GetId(), Key, Target, ReceiveDelegate));
 }
 
 void MiniPubSub::FMessenger::Unsubscribe(const FString& Key)
