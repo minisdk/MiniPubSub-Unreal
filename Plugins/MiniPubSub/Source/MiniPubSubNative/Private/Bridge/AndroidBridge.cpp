@@ -13,7 +13,7 @@ MiniPubSub::FAndroidBridge::FAndroidBridge()
 	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
 	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
 	SendMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;Ljava/lang/String;)V");
-	SendSyncMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "sendSync", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;")
+	SendSyncMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "sendSync", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
 #endif
 	DelNativeAndroidCallback.BindLambda([this](const FString& Info, const FString& Data)
@@ -47,7 +47,7 @@ FString MiniPubSub::FAndroidBridge::SendSync(const FString& Info, const FString&
 	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
 	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
 
-	jobject ResultObj = JNIEnv->CallObjectMethod(AndroidBridgeObject,  JavaInfo, JavaData);
+	jobject ResultObj = JNIEnv->CallObjectMethod(AndroidBridgeObject, SendSyncMessageMethod, JavaInfo, JavaData);
 	jstring ResultStr = (jstring)ResultObj;
 	FString Result(UTF8_TO_TCHAR(ResultStr));
 	JNIEnv->DeleteLocalRef(JavaInfo);

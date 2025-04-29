@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
+#include "Serialization/JsonSerializerMacros.h"
 
 namespace MiniPubSub
 {

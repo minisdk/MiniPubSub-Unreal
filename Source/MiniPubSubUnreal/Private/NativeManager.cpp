@@ -63,9 +63,9 @@ void FNativeManager::ShowToastAsync(const FToastData& Toast)
 	{
 		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
 		NativeMessenger.Publish(MiniPubSub::FTopic(TEXT("SEND_TOAST_ASYNC"), MiniPubSub::ESdkType::Native), Message
-			, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FMessage& Message)
+			, MiniPubSub::FReceiveDelegate::CreateLambda([](const MiniPubSub::FMessage& ResultMessage)
 		{
-			TSharedPtr<FJsonObject> ReceivedJsonObject = Message.ToJsonObject();
+			TSharedPtr<FJsonObject> ReceivedJsonObject = ResultMessage.ToJsonObject();
 			if(!ReceivedJsonObject.IsValid())
 			{
 				return;
