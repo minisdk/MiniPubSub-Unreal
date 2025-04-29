@@ -8,6 +8,8 @@ extern "C"
 {
 	void Initialize(iOSNativeCallback NativeCallback);
 	void SendNative(const char* Info, const char* Json);
+	const char* SendSyncNative(const char* Info, const char* Json);
+	void FreeCString(const char* ptr);
 }
 // #include "MiniPubSubNative/Thirdparty/iOS/MiniPubSub.framework/Headers/ObjcSide.h"
 #endif
@@ -24,7 +26,6 @@ MiniPubSub::FIOSBridge::FIOSBridge()
 {
 #if PLATFORM_IOS
 	Initialize(&NativeCallback);
-	// [[ObjcSide sharedInstance] initializeWith:&NativeCallback];
 #endif
 	if(Instance == nullptr)
 	{
@@ -42,12 +43,18 @@ void MiniPubSub::FIOSBridge::Send(const FString& Info, const FString& Data)
 {
 #if PLATFORM_IOS
 	SendNative(TCHAR_TO_UTF8(*Info), TCHAR_TO_UTF8(*Data));
-	// [[ObjcSide sharedInstance] sendToNativeWithInfo:TCHAR_TO_UTF8(*Info) AndData: TCHAR_TO_UTF8(*Data)];
 #endif
 }
 
 FString MiniPubSub::FIOSBridge::SendSync(const FString& Info, const FString& Data)
 {
+#if PLATFORM_IOS
+	const char* CStringResult = SendSyncNative(TCHAR_TO_UTF8(*Info), TCHAR_TO_UTF8(*Data));
+	FString Result(UTF8_TO_TCHAR(CStringResult));
+	FreeCString(CStringResult);
+	return Result;
+#else
 	return "{}";
+#endif
 }
 

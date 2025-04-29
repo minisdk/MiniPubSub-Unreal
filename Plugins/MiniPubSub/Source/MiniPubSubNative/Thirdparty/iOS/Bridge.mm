@@ -10,6 +10,14 @@ extern "C"
     }
     void SendNative(const char* Info, const char* Json)
     {
-        [[ObjcSide sharedInstance] sendToNativeWithInfo:Info AndData: Json];
+        [[ObjcSide sharedInstance] sendToNativeWithInfo:Info andData: Json];
+    }
+    const char* SendSyncNative(const char* Info, const char* Json)
+    {
+        return [[ObjcSide sharedInstance] sendSyncToNativeWithInfo: Info andData: Json];
+    }
+    void FreeCString(const char* ptr)
+    {
+        [[ObjcSide sharedInstance] freeCString: ptr];
     }
 }
