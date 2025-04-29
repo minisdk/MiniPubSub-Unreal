@@ -19,8 +19,8 @@ namespace MiniPubSub
 		{
 			TargetNumber = StaticCast<int32>(InTarget);
 		}
-
-		ESdkType GetTarget()
+		
+		ESdkType GetTarget() const
 		{
 			return StaticCast<ESdkType>(TargetNumber);
 		}

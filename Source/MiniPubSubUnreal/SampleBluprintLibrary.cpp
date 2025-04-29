@@ -27,3 +27,8 @@ void USampleBluprintLibrary::SendNativeAsyncTest(const FToastData& Data)
 {
 	GNativeManager.ShowToastAsync(Data);	
 }
+
+void USampleBluprintLibrary::SendNativeSyncTest(const FToastData& Data)
+{
+	GNativeManager.ShowToastSync(Data);
+}

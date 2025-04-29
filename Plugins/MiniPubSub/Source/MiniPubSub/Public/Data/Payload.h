@@ -30,5 +30,22 @@ namespace MiniPubSub
 			FJsonSerializer::Serialize(JsonObject, Writer);
 			return FPayload(Json);
 		}
+
+		template<typename DataType>
+		DataType ToJsonSerializable() const
+		{
+			static_assert(TIsDerivedFrom<DataType, FJsonSerializable>::Value, "DataType must be derived from FJsonSerializable");
+			DataType Data = DataType();
+			Data.FromJson(Json);
+			return Data;
+		}
+
+		TSharedPtr<FJsonObject> ToJsonObject() const
+		{
+			TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+			TSharedRef<TJsonReader<TCHAR>> Reader = TJsonReaderFactory<TCHAR>::Create(Json);
+			FJsonSerializer::Deserialize(Reader, JsonObject);
+			return JsonObject;
+		}
 	};
 }

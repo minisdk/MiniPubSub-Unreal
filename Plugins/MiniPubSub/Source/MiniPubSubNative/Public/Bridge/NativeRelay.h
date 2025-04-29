@@ -12,6 +12,7 @@ namespace MiniPubSub
 
 		void OnReceiveFromNative(const FString& Info, const FString& Data) const;
 		void OnWatch(const FMessage& Message) const;
+		FPayload OnHandle(const FMessage& Message) const;
 	
 	public:
 		~FNativeRelay();

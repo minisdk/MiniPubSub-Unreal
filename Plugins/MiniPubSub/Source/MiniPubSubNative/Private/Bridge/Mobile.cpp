@@ -26,6 +26,15 @@ void MiniPubSub::FMobile::Send(const FString& Info, const FString& Data)
 #endif
 }
 
+FString MiniPubSub::FMobile::SendSync(const FString& Info, const FString& Data)
+{
+#if PLATFORM_ANDROID || PLATFORM_IOS
+	return this->Bridge.Get()->SendSync(Info, Data);
+#else
+	return TEXT("{}");
+#endif
+}
+
 void MiniPubSub::FMobile::BindNative(const FDelegate_Native_Handler& Handle)
 {
 #if PLATFORM_ANDROID || PLATFORM_IOS

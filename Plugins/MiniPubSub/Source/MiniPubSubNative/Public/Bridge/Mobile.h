@@ -22,6 +22,7 @@ namespace MiniPubSub
 		// static TSharedRef<FMobileBridge> Get();
 
 		void Send(const FString& Info, const FString& Data);
+		FString SendSync(const FString& Info, const FString& Data);
 		void BindNative(const FDelegate_Native_Handler& Handle);
 	};
 }

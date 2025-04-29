@@ -43,4 +43,5 @@ public:
 	void InitNativePubSub();
 	void ShowToast(const FToastData& Toast);
 	void ShowToastAsync(const FToastData& Toast);
+	void ShowToastSync(const FToastData& Toast);
 };

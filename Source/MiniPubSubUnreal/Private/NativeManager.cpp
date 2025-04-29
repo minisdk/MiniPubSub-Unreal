@@ -76,3 +76,22 @@ void FNativeManager::ShowToastAsync(const FToastData& Toast)
 		}));
 	}
 }
+
+void FNativeManager::ShowToastSync(const FToastData& Toast)
+{
+	TSharedPtr<FJsonObject> JsonObject = FJsonObjectConverter::UStructToJsonObject(Toast);
+	if(JsonObject.IsValid())
+	{
+		MiniPubSub::FPayload Message = MiniPubSub::FPayload::FromJsonObject(JsonObject.ToSharedRef());
+		MiniPubSub::FPayload ResultPayload = NativeMessenger.SendSync(MiniPubSub::FTopic(TEXT("SEND_TOAST_SYNC"), ::MiniPubSub::ESdkType::Native), Message);
+
+		TSharedPtr<FJsonObject> ReceivedJsonObject = ResultPayload.ToJsonObject();
+		if(!ReceivedJsonObject.IsValid())
+		{
+			return;
+		}
+		FToastResult Result;
+		FJsonObjectConverter::JsonObjectToUStruct<FToastResult>(ReceivedJsonObject.ToSharedRef(), &Result);
+		UE_LOG(LogTemp, Display, TEXT("Toast Show Async Count : %d"), Result.ToastCount)
+	}
+}

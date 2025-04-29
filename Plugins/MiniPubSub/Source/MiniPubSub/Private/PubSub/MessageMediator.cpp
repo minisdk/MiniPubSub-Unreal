@@ -17,15 +17,10 @@ void MiniPubSub::FMessageMediator::Unregister(const int& Id, const FString& Key)
 	}
 }
 
-// void MiniPubSub::FMessageMediator::Watch(const FReceiver& Receiver)
-// {
-// 	WatcherDic.Add(Receiver.NodeId, Receiver);
-// }
-//
-// void FMessageMediator::Unwatch(const int& Id)
-// {
-// 	WatcherDic.Remove(Id);
-// }
+void MiniPubSub::FMessageMediator::RegisterInstant(FReceiver&& Receiver)
+{
+	InstantReceiverMap.Add(Receiver.Key, Receiver);
+}
 
 void MiniPubSub::FMessageMediator::Broadcast(const FMessage& Message)
 {
@@ -60,7 +55,33 @@ void MiniPubSub::FMessageMediator::Broadcast(const FMessage& Message)
 	}
 }
 
-void MiniPubSub::FMessageMediator::RegisterInstant(FReceiver&& Receiver)
+void MiniPubSub::FMessageMediator::Handle(const FString& Key, FHandler&& Handler)
 {
-	InstantReceiverMap.Add(Receiver.Key, Receiver);
+	HandlerMap.Add(Key, Handler);
+}
+
+void MiniPubSub::FMessageMediator::Handle(const ESdkType& Target, FHandler&& Handler)
+{
+	TargetHandlerMap.Add(Target, Handler);
+}
+
+MiniPubSub::FPayload MiniPubSub::FMessageMediator::SendSync(const FMessage& Message)
+{
+	if(FHandler* Handler = HandlerMap.Find(Message.GetKey()))
+	{
+		if(Handler->CanInvoke(Message.Info))
+		{
+			return Handler->HandleDelegate.Execute(Message);
+		}
+	}
+
+	const ESdkType Target =  Message.Info.Topic.GetTarget();
+	if(FHandler* TargetHandler = TargetHandlerMap.Find(Target))
+	{
+		if(TargetHandler->CanInvoke(Message.Info))
+		{
+			return TargetHandler->HandleDelegate.Execute(Message);
+		}
+	}
+	return FPayload("{}");
 }

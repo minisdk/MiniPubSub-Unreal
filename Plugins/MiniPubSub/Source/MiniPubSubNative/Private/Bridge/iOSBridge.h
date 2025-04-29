@@ -20,7 +20,6 @@ namespace MiniPubSub
 		virtual ~FIOSBridge() override;
 		
 		virtual void Send(const FString& Info, const FString& Data) override;
-
-		// static void NativeCallback(const char* Text);
+		virtual FString SendSync(const FString& Info, const FString& Data) override;
 	};
 }

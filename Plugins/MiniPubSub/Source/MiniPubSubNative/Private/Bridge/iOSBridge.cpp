@@ -46,3 +46,8 @@ void MiniPubSub::FIOSBridge::Send(const FString& Info, const FString& Data)
 #endif
 }
 
+FString MiniPubSub::FIOSBridge::SendSync(const FString& Info, const FString& Data)
+{
+	return "{}";
+}
+

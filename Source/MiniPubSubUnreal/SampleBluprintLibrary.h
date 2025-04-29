@@ -25,4 +25,7 @@ class MINIPUBSUBUNREAL_API USampleBluprintLibrary : public UBlueprintFunctionLib
 
 	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
 	static void SendNativeAsyncTest(const FToastData& Data);
+
+	UFUNCTION(BlueprintCallable, Category="PubSub Sample")
+	static void SendNativeSyncTest(const FToastData& Data);
 };

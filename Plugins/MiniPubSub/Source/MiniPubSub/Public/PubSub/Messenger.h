@@ -1,4 +1,5 @@
 #pragma once
+#include "Handler.h"
 #include "Publisher.h"
 #include "Receiver.h"
 
@@ -12,6 +13,7 @@ namespace MiniPubSub
 			: Target(InTarget){}
 		void Subscribe(const FString& Key, const FReceiveDelegate& ReceiveDelegate);
 		void Unsubscribe(const FString& Key);
+		void Handle(const FString& Key, const FHandleDelegate& HandleDelegate);
 	};
 
 }

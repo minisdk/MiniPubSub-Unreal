@@ -19,6 +19,7 @@ namespace MiniPubSub
 		JNIEnv* JNIEnv;
 		jobject AndroidBridgeObject;
 		jmethodID SendMessageMethod;
+		jmethodID SendSyncMessageMethod;
 	#endif
 
 	public:
@@ -26,5 +27,6 @@ namespace MiniPubSub
 		virtual ~FAndroidBridge() override;
 
 		virtual void Send(const FString& Info, const FString& Data) override;
+		virtual FString SendSync(const FString& Info, const FString& Data) override;
 	};
 }

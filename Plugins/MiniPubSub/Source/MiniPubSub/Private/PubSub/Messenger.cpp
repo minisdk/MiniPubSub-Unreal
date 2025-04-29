@@ -12,3 +12,8 @@ void MiniPubSub::FMessenger::Unsubscribe(const FString& Key)
 {
 	FMessageManager::Get()->GetMediator().Unregister(GetId(), Key);
 }
+
+void MiniPubSub::FMessenger::Handle(const FString& Key, const FHandleDelegate& HandleDelegate)
+{
+	FMessageManager::Get()->GetMediator().Handle(Key, FHandler(GetId(), Key, Target, HandleDelegate));
+}

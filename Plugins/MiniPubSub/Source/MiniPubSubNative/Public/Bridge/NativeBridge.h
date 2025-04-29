@@ -14,6 +14,7 @@ namespace MiniPubSub
 		
 		FDelegate_Native_Handler NativeHandle;
 		virtual void Send(const FString& Info, const FString& Data) = 0;
+		virtual FString SendSync(const FString& Info, const FString& Data) = 0;
 	};
 }
 
