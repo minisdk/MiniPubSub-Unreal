@@ -2,9 +2,18 @@
 
 #include "PubSub/MessageManager.h"
 
+void MiniPubSub::FPublisher::Publish(const FTopic& Topic) const
+{
+	Publish(Topic, FPayload(TEXT("{}")));	
+}
+
+void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FReceiveDelegate& ReplyCallback) const
+{
+	Publish(Topic, FPayload(TEXT("{}")), ReplyCallback);
+}
+
 void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Payload) const
 {
-
 	FNodeInfo Info;
 	Info.MessageOwnerId = GetId();
 	Info.PublisherId = GetId();
@@ -12,7 +21,7 @@ void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Payloa
 	FMessageManager::Get()->GetMediator().Broadcast(Message);
 }
 
-void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Payload, FReceiveDelegate ReplyCallback) const
+void MiniPubSub::FPublisher::Publish(const FTopic& Topic, const FPayload& Payload, const FReceiveDelegate& ReplyCallback) const
 {
 	FString ReplyKey = FString::Printf(TEXT("%s_id%d"), *Topic.Key, FIdCounter::GetNext());
 	FTopic ReplyTopic{ReplyKey, ESdkType::Game};

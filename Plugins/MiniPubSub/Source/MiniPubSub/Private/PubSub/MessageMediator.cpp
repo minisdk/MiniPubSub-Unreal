@@ -2,7 +2,16 @@
 
 void MiniPubSub::FMessageMediator::Register(const FReceiver& Receiver)
 {
-	ReceiverMap.FindOrAdd(Receiver.Key).Add(Receiver);
+	TArray<FReceiver>& Receivers = ReceiverMap.FindOrAdd(Receiver.Key);
+	int32 Index = Receivers.IndexOfByPredicate([Id = Receiver.NodeId](const FReceiver& Element)
+	{
+		return Element.NodeId == Id;
+	});
+	if(Index != INDEX_NONE)
+	{
+		Receivers.RemoveAtSwap(Index);
+	}
+	Receivers.Add(Receiver);
 }
 
 void MiniPubSub::FMessageMediator::Unregister(const int& Id, const FString& Key)

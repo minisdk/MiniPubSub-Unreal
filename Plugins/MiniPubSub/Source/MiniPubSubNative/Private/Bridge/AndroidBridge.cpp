@@ -47,9 +47,9 @@ FString MiniPubSub::FAndroidBridge::SendSync(const FString& Info, const FString&
 	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
 	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
 
-	jobject ResultObj = JNIEnv->CallObjectMethod(AndroidBridgeObject, SendSyncMessageMethod, JavaInfo, JavaData);
-	jstring ResultStr = (jstring)ResultObj;
-	FString Result(UTF8_TO_TCHAR(ResultStr));
+	jstring ResultStr = (jstring) JNIEnv->CallObjectMethod(AndroidBridgeObject, SendSyncMessageMethod, JavaInfo, JavaData);
+	const char* UTF8Result = JNIEnv->GetStringUTFChars(ResultStr, nullptr);
+	FString Result(UTF8_TO_TCHAR(UTF8Result));
 	JNIEnv->DeleteLocalRef(JavaInfo);
 	JNIEnv->DeleteLocalRef(JavaData);
 	JNIEnv->DeleteLocalRef(ResultStr);
