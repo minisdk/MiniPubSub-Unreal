@@ -2,6 +2,11 @@
 언리얼 엔진과 모바일 플랫폼간 통신을 위한 pubsub 방식의 라이브러리입니다.
 직렬화된 데이터를 발행하여 사전 등록된 구독자들에게 전달합니다.
 
+## 같이 보기
+- [MiniPubSub-Android](https://github.com/minisdk/MiniPubSub-Android)
+- [MiniPubSub-iOS](https://github.com/minisdk/MiniPubSub-iOS)
+- [MiniPubSub-Unity](https://github.com/minisdk/MiniPubSub-Unity)
+
 ## 시작하기
 [Release](https://github.com/minisdk/MiniPubSub-Unreal/releases) 에서 플러그인을 다운 받아 프로젝트에 추가합니다.
 
