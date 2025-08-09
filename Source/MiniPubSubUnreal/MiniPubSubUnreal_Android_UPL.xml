@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+    <trace enabled="true"/>
+    <init>
+        <log text="MiniPubSubUnreal upl android"/>
+    </init>
+
+    <gradleCopies>
+        <log text="MiniPubSubUnreal upl aar copy"/>
+        <log text="MiniPubSubUnreal upl BuildDir : $S(ProjectDir)"/>
+        <log text="MiniPubSubUnreal upl BuildDir : $S(BuildDir)"/>
+        <log text="MiniPubSubUnreal upl PluginDir : $S(PluginDir)"/>
+        <copyFile src="$S(PluginDir)/Thirdparty/Android/sample-release.aar"
+                  dst="$S(BuildDir)/gradle/app/src/main/libs/minipubsubUnreal/sample-release.aar" />
+    </gradleCopies>
+
+    <buildGradleAdditions>
+        <log text="MiniPubSubUnreal gradle modify"/>
+        <insert>
+            android{
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+            
+            dependencies{
+            implementation fileTree(dir: 'src/main/libs/minipubsubUnreal', include: ['*.aar'])
+            }
+        </insert>
+    </buildGradleAdditions>
+
+
+    <androidManifestUpdates>
+        <loopElements tag="activity">
+            <loopElements tag="intent-filter">
+                <log text="###UPL### has intentFilter!"/>
+                <setBool result="bHasIntentFilter" value="true"/>
+            </loopElements>
+            <if condition="bHasIntentFilter">
+                <true>
+                    <log text="###UPL### set android:exported"/>
+                    <addAttribute tag="$" name="android:exported" value="true"/>
+                    <setBool result="bHasIntentFilter" value="false"/>
+                </true>
+            </if>
+        </loopElements>
+    </androidManifestUpdates>
+
+</root>

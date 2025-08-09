@@ -1,0 +1,69 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "AndroidBridge.h"
+
+MiniPubSub::FDelegate_Native_Handler DelNativeAndroidCallback;
+
+MiniPubSub::FAndroidBridge::FAndroidBridge()
+{
+#if PLATFORM_ANDROID
+	JNIEnv = AndroidJavaEnv::GetJavaEnv();
+	jclass AndroidBridgeClass = AndroidJavaEnv::FindJavaClass("com/minisdk/pubsub/bridge/UnrealNativeBridge");
+	jmethodID ConstructorID = JNIEnv->GetMethodID(AndroidBridgeClass, "<init>", "()V");
+	AndroidBridgeObject = JNIEnv->NewObject(AndroidBridgeClass, ConstructorID);
+	SendMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "send", "(Ljava/lang/String;Ljava/lang/String;)V");
+	SendSyncMessageMethod = JNIEnv->GetMethodID(AndroidBridgeClass, "sendSync", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+	JNIEnv->DeleteLocalRef(AndroidBridgeClass);
+#endif
+	DelNativeAndroidCallback.BindLambda([this](const FString& Info, const FString& Data)
+	{
+		bool _ = this->NativeHandle.ExecuteIfBound(Info, Data);
+	});
+}
+
+MiniPubSub::FAndroidBridge::~FAndroidBridge()
+{
+#if PLATFORM_ANDROID
+	JNIEnv->DeleteLocalRef(AndroidBridgeObject);
+#endif
+}
+
+void MiniPubSub::FAndroidBridge::Send(const FString& Info, const FString& Data)
+{
+#if PLATFORM_ANDROID
+	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
+	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
+	
+	JNIEnv->CallVoidMethod(AndroidBridgeObject, SendMessageMethod, JavaInfo, JavaData);
+	JNIEnv->DeleteLocalRef(JavaInfo);
+	JNIEnv->DeleteLocalRef(JavaData);
+#endif
+}
+
+FString MiniPubSub::FAndroidBridge::SendSync(const FString& Info, const FString& Data)
+{
+#if PLATFORM_ANDROID
+	jstring JavaInfo = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Info));
+	jstring JavaData = JNIEnv->NewStringUTF(TCHAR_TO_UTF8(*Data));
+
+	jstring ResultStr = (jstring) JNIEnv->CallObjectMethod(AndroidBridgeObject, SendSyncMessageMethod, JavaInfo, JavaData);
+	const char* UTF8Result = JNIEnv->GetStringUTFChars(ResultStr, nullptr);
+	FString Result(UTF8_TO_TCHAR(UTF8Result));
+	JNIEnv->DeleteLocalRef(JavaInfo);
+	JNIEnv->DeleteLocalRef(JavaData);
+	JNIEnv->DeleteLocalRef(ResultStr);
+	return Result;
+#else
+	return TEXT("{}");
+#endif
+}
+
+#if PLATFORM_ANDROID
+JNI_METHOD void Java_com_minisdk_pubsub_bridge_UnrealNativeBridge_nativeCallback(JNIEnv* jenv, jobject Obj, jstring Info, jstring Data)
+{
+	FString UnrealInfo = FJavaHelper::FStringFromLocalRef(jenv, Info);
+	FString UnrealData = FJavaHelper::FStringFromLocalRef(jenv, Data);
+	DelNativeAndroidCallback.Execute(UnrealInfo, UnrealData);
+}
+#endif

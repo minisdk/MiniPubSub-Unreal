@@ -1,0 +1,20 @@
+#pragma once
+
+namespace MiniPubSub
+{
+	DECLARE_DELEGATE_TwoParams(FDelegate_Native_Handler, const FString&, const FString&);
+
+	class INativeBridge
+	{
+	public:
+		virtual ~INativeBridge()
+		{
+			
+		};
+		
+		FDelegate_Native_Handler NativeHandle;
+		virtual void Send(const FString& Info, const FString& Data) = 0;
+		virtual FString SendSync(const FString& Info, const FString& Data) = 0;
+	};
+}
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+    <trace enabled="true"/>
+    <init>
+      <log text="MiniPubSub upl android"/>
+    </init>
+
+    <gradleCopies>
+        <log text="MiniPubSub upl aar copy"/>
+        <log text="MiniPubSub upl BuildDir : $S(BuildDir)"/>
+        <log text="MiniPubSub upl PluginDir : $S(PluginDir)"/>
+        <copyFile src="$S(PluginDir)/Thirdparty/Android/minipubsub-release.aar"
+                  dst="$S(BuildDir)/gradle/app/src/main/libs/minipubsub/minipubsub-release.aar" />
+    </gradleCopies>
+
+    <buildGradleAdditions>
+        <log text="MiniPubSub gradle modify"/>
+        <insert>
+            <![CDATA[
+dependencies{
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation fileTree(dir: 'src/main/libs/minipubsub', include: ['*.aar'])
+}
+            ]]>
+        </insert>
+    </buildGradleAdditions>
+
+    <gameActivityImportAdditions>
+        <insert>
+            <![CDATA[
+import com.minisdk.pubsub.bridge.UnrealNativeBridge;
+            ]]>
+        </insert>
+    </gameActivityImportAdditions>
+    <gameActivityOnCreateAdditions>
+        <insert>
+            <![CDATA[
+UnrealNativeBridge.SetActivity(this);
+            ]]>
+        </insert>
+    </gameActivityOnCreateAdditions>
+
+</root>
